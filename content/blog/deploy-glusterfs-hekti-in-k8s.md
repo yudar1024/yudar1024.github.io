@@ -423,3 +423,23 @@ blockdev --rereadpt /dev/sdb
 ```
 5 重启
 
+## pvc一直pending
+
+此时有两种可能
+
+1. 网络不通
+2. storageclass 定义出现问题，或者heketi创建的集群出现问题
+
+#### 第一种情况，
+
+检查网络是否畅通，进入一个pod 去 telnet 或者 ping heketi server的ip， 如果能平通，进一步访问 
+
+``` bash
+curl http://<heketi-server-ip>:<heketi-server-port>/hello
+```
+
+如何能拿到返回，说明网络是通的。
+
+#### 第二种情况
+
+一般是heketi 初始化集群出现问题，需要删除heketi 的db，然后重新topology load 初始化集群，这个情况非常麻烦，甚至可能需要删除原先存在的volume。通过lsblk 命令查看gluster集群node的块存储情况，理论上应该是一样的，如果不一样，恭喜，需要重新初始化所有的glusterd systemd服务。
