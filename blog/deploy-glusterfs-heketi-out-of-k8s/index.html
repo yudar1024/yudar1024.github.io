@@ -2,34 +2,34 @@
 <html lang="zh-cn">
   <head>
   <meta charset="utf-8">
-<title>kubernetes 集群中部署 glusterfs 与 heketi - 陈sir 的流水帐</title>
+<title>kubernetes 使用独立 glusterfs &#43; heketi集群 - 陈sir 的流水帐</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
 
   <meta name="generator" content="Hugo 0.58.0" />
-  <meta itemprop="name" content="kubernetes 集群中部署 glusterfs 与 heketi">
-<meta itemprop="description" content="deploy glusterfs and heketi in kubernetes">
+  <meta itemprop="name" content="kubernetes 使用独立 glusterfs &#43; heketi集群">
+<meta itemprop="description" content="deploy glusterfs and heketi out of kubernetes">
 
 
-<meta itemprop="datePublished" content="2019-09-07T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2019-09-07T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="772">
+<meta itemprop="datePublished" content="2019-09-10T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-09-10T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1131">
 
 
 
 <meta itemprop="keywords" content="kubernetes," />
 
-  <meta property="og:title" content="kubernetes 集群中部署 glusterfs 与 heketi" />
-<meta property="og:description" content="deploy glusterfs and heketi in kubernetes" />
+  <meta property="og:title" content="kubernetes 使用独立 glusterfs &#43; heketi集群" />
+<meta property="og:description" content="deploy glusterfs and heketi out of kubernetes" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://yudar1024.github.io/blog/deploy-glusterfs-hekti-in-k8s/" />
-<meta property="article:published_time" content="2019-09-07T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-09-07T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
+<meta property="og:url" content="https://yudar1024.github.io/blog/deploy-glusterfs-heketi-out-of-k8s/" />
+<meta property="article:published_time" content="2019-09-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-09-10T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
 
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="kubernetes 集群中部署 glusterfs 与 heketi"/>
-<meta name="twitter:description" content="deploy glusterfs and heketi in kubernetes"/>
+<meta name="twitter:title" content="kubernetes 使用独立 glusterfs &#43; heketi集群"/>
+<meta name="twitter:description" content="deploy glusterfs and heketi out of kubernetes"/>
 <meta name="twitter:site" content="@example"/>
 
   
@@ -144,37 +144,37 @@
 
   
     
-    <a href="//twitter.com/share?text=kubernetes%20%e9%9b%86%e7%be%a4%e4%b8%ad%e9%83%a8%e7%bd%b2%20glusterfs%20%e4%b8%8e%20heketi&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f" target="_blank" rel="noopener" class="share-btn twitter">
+    <a href="//twitter.com/share?text=kubernetes%20%e4%bd%bf%e7%94%a8%e7%8b%ac%e7%ab%8b%20glusterfs%20%2b%20heketi%e9%9b%86%e7%be%a4&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f" target="_blank" rel="noopener" class="share-btn twitter">
         <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
       </a>
   
 
   
-      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f" target="_blank" rel="noopener" class="share-btn facebook">
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f" target="_blank" rel="noopener" class="share-btn facebook">
         <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
         </a>
   
 
   
-    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f&amp;title=kubernetes%20%e9%9b%86%e7%be%a4%e4%b8%ad%e9%83%a8%e7%bd%b2%20glusterfs%20%e4%b8%8e%20heketi" target="_blank" rel="noopener" class="share-btn reddit">
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f&amp;title=kubernetes%20%e4%bd%bf%e7%94%a8%e7%8b%ac%e7%ab%8b%20glusterfs%20%2b%20heketi%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn reddit">
           <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
         </a>
   
 
   
-        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f&amp;title=kubernetes%20%e9%9b%86%e7%be%a4%e4%b8%ad%e9%83%a8%e7%bd%b2%20glusterfs%20%e4%b8%8e%20heketi" target="_blank" rel="noopener" class="share-btn linkedin">
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f&amp;title=kubernetes%20%e4%bd%bf%e7%94%a8%e7%8b%ac%e7%ab%8b%20glusterfs%20%2b%20heketi%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn linkedin">
             <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
           </a>
   
 
   
-        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f&amp;description=kubernetes%20%e9%9b%86%e7%be%a4%e4%b8%ad%e9%83%a8%e7%bd%b2%20glusterfs%20%e4%b8%8e%20heketi" target="_blank" rel="noopener" class="share-btn pinterest">
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f&amp;description=kubernetes%20%e4%bd%bf%e7%94%a8%e7%8b%ac%e7%ab%8b%20glusterfs%20%2b%20heketi%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn pinterest">
           <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
         </a>
   
 
   
-        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f" target="_blank" class="share-btn email" data-proofer-ignore>
           <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
         </a>
   
@@ -249,19 +249,19 @@
   <header>
   <div class="title">
     
-        <h2><a href="/blog/deploy-glusterfs-hekti-in-k8s/">kubernetes 集群中部署 glusterfs 与 heketi</a></h2>
+        <h2><a href="/blog/deploy-glusterfs-heketi-out-of-k8s/">kubernetes 使用独立 glusterfs &#43; heketi集群</a></h2>
     
     
-        <p>deploy glusterfs and heketi in kubernetes</p>
+        <p>deploy glusterfs and heketi out of kubernetes</p>
     
 </div>
   <div class="meta">
-    <time class="published" datetime="2019-09-07 00:00:00 &#43;0000 UTC">
-      September 7, 2019
+    <time class="published" datetime="2019-09-10 00:00:00 &#43;0000 UTC">
+      September 10, 2019
     </time>
     <span class="author">陈 sir</span>
     
-      <p>4 分钟</p>
+      <p>6 分钟</p>
     
   </div>
 </header>
@@ -274,37 +274,37 @@
 
   
     
-    <a href="//twitter.com/share?text=kubernetes%20%e9%9b%86%e7%be%a4%e4%b8%ad%e9%83%a8%e7%bd%b2%20glusterfs%20%e4%b8%8e%20heketi&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f" target="_blank" rel="noopener" class="share-btn twitter">
+    <a href="//twitter.com/share?text=kubernetes%20%e4%bd%bf%e7%94%a8%e7%8b%ac%e7%ab%8b%20glusterfs%20%2b%20heketi%e9%9b%86%e7%be%a4&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f" target="_blank" rel="noopener" class="share-btn twitter">
         <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
       </a>
   
 
   
-      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f" target="_blank" rel="noopener" class="share-btn facebook">
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f" target="_blank" rel="noopener" class="share-btn facebook">
         <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
         </a>
   
 
   
-    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f&amp;title=kubernetes%20%e9%9b%86%e7%be%a4%e4%b8%ad%e9%83%a8%e7%bd%b2%20glusterfs%20%e4%b8%8e%20heketi" target="_blank" rel="noopener" class="share-btn reddit">
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f&amp;title=kubernetes%20%e4%bd%bf%e7%94%a8%e7%8b%ac%e7%ab%8b%20glusterfs%20%2b%20heketi%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn reddit">
           <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
         </a>
   
 
   
-        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f&amp;title=kubernetes%20%e9%9b%86%e7%be%a4%e4%b8%ad%e9%83%a8%e7%bd%b2%20glusterfs%20%e4%b8%8e%20heketi" target="_blank" rel="noopener" class="share-btn linkedin">
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f&amp;title=kubernetes%20%e4%bd%bf%e7%94%a8%e7%8b%ac%e7%ab%8b%20glusterfs%20%2b%20heketi%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn linkedin">
             <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
           </a>
   
 
   
-        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f&amp;description=kubernetes%20%e9%9b%86%e7%be%a4%e4%b8%ad%e9%83%a8%e7%bd%b2%20glusterfs%20%e4%b8%8e%20heketi" target="_blank" rel="noopener" class="share-btn pinterest">
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f&amp;description=kubernetes%20%e4%bd%bf%e7%94%a8%e7%8b%ac%e7%ab%8b%20glusterfs%20%2b%20heketi%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn pinterest">
           <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
         </a>
   
 
   
-        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-hekti-in-k8s%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-glusterfs-heketi-out-of-k8s%2f" target="_blank" class="share-btn email" data-proofer-ignore>
           <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
         </a>
   
@@ -316,19 +316,9 @@
   <div class="content">
     
 
-<h1 id="组件介绍">组件介绍</h1>
+<h1 id="kubernetes-使用独立-glusterfs-heketi集群">kubernetes 使用独立 glusterfs + heketi集群</h1>
 
-<h2 id="heketi">Heketi</h2>
-
-<p>Heketi提供了一个RESTful管理界面，可以用来管理GlusterFS卷的生命周期。 通过Heketi，就可以像使用OpenStack Manila，Kubernetes和OpenShift一样申请可以动态配置GlusterFS卷。Heketi会动态在集群内选择bricks构建所需的volumes，这样以确保数据的副本会分散到集群不同的故障域内。同时Heketi还支持任意数量的ClusterFS集群，以保证接入的云服务器不局限于单个GlusterFS集群。</p>
-
-<h2 id="gluster-kubernetes">Gluster-Kubernetes</h2>
-
-<p><a href="https://github.com/gluster/gluster-kubernetes">Gluster-Kubernetes</a>是一个可以将GluserFS和Hekiti轻松部署到Kubernetes集群的开源项目。另外也提供在Kubernetes中可以采用StorageClass来动态管理GlusterFS卷。</p>
-
-<h2 id="部署环境">部署环境</h2>
-
-<p>服务器分配信息:</p>
+<p><strong>主机列表</strong></p>
 
 <table>
 <thead>
@@ -336,6 +326,7 @@
 <th>Hostname</th>
 <th>服务器IP</th>
 <th>存储IP</th>
+<th>用途</th>
 <th>硬盘信息</th>
 <th>容量G</th>
 </tr>
@@ -344,101 +335,211 @@
 <tbody>
 <tr>
 <td>master1</td>
-<td>192.168.10.51</td>
-<td>192.168.10.51</td>
+<td>192.168.10.50</td>
+<td>192.168.10.50</td>
+<td>hekteti server</td>
 <td>/dev/sdb</td>
 <td>300G</td>
 </tr>
 
 <tr>
 <td>node1</td>
-<td>192.168.10.52</td>
-<td>192.168.10.52</td>
+<td>192.168.10.51</td>
+<td>192.168.10.51</td>
+<td>glusterfs</td>
 <td>/dev/sdb</td>
 <td>300G</td>
 </tr>
 
 <tr>
 <td>node2</td>
+<td>192.168.10.52</td>
+<td>192.168.10.53</td>
+<td>glusterfs</td>
+<td>/dev/sdb</td>
+<td>300G</td>
+</tr>
+
+<tr>
+<td>node3</td>
 <td>192.168.10.53</td>
 <td>192.168.10.53</td>
+<td>glusterfs</td>
 <td>/dev/sdb</td>
 <td>300G</td>
 </tr>
 </tbody>
 </table>
 
-<h2 id="部署步骤">部署步骤</h2>
+<p><strong>所有主机的/etc/hosts均包含</strong></p>
 
-<p>安装依赖组件 （master1 node1 node2）</p>
+<pre><code class="language-bash">192.168.10.50 master1
+192.168.10.51 node1
+192.168.10.52 node2
+192.168.10.53 node3
+</code></pre>
 
-<pre><code class="language-shell">yum install -y centos-release-gluster
-yum install -y glusterfs glusterfs-server glusterfs-fuse glusterfs-rdma glusterfs-geo-replication glusterfs-devel
+<p>配置所有服务器之间免密登录（可选）</p>
+
+<p>在node1，node2，node3 安装  glusterfs-server glusterfs-fuse，并加载fuse 内核模块</p>
+
+<pre><code class="language-bash">#!/bin/bash
+yum install -y centos-release-gluster
+yum install -y glusterfs-server glusterfs-fuse
 systemctl start glusterd
 systemctl enable glusterd
+modprobe fuse
+echo &quot;modprobe -- fuse&quot; &gt;&gt; /etc/sysconfig/modules/glusterfs.modules
+# 关闭防火墙
+systemctl stop firewalld
+systemctl disable firewalld
 </code></pre>
 
-<p>内核模块加载 （master1 node1 node2）</p>
+<p>master1 安装 heketi-server 与heketi-client, 并加载 dm_thin_pool 内核模块</p>
 
-<pre><code class="language-shell"># 加载 glusterfs 所需的内核模块
-touch /etc/sysconfig/modules/glusterfs.modules
-echo '#!/bin/bash' &gt;&gt; /etc/sysconfig/modules/glusterfs.modules
-echo &quot;modprobe -- dm_snapshot&quot; &gt;&gt; /etc/sysconfig/modules/glusterfs.modules
-echo &quot;modprobe -- dm_mirror&quot; &gt;&gt; /etc/sysconfig/modules/glusterfs.modules
-echo &quot;modprobe -- dm_thin_pool&quot; &gt;&gt; /etc/sysconfig/modules/glusterfs.modules
-# 授权
-chmod 755 /etc/sysconfig/modules/glusterfs.modules 
-
-# 加载模块
-bash /etc/sysconfig/modules/glusterfs.modules
+<pre><code class="language-bash">yum install heketi heketi-client -y
+modprobe dm_thin_pool
+# 关闭防火墙
+systemctl stop firewalld
+systemctl disable firewalld
 </code></pre>
 
-<p>校验模块加载</p>
+<p>在master1生成ssh key，让其安装的heketi-server可以免密登录到node1，node2，node3</p>
 
-<pre><code class="language-shell">$lsmod |egrep &quot;dm_snapshot|dm_mirror|dm_thin_pool&quot;
-dm_thin_pool           66298  0 
-dm_persistent_data     75269  1 dm_thin_pool
-dm_bio_prison          18209  1 dm_thin_pool
-dm_snapshot            39104  0 
-dm_bufio               28014  2 dm_persistent_data,dm_snapshot
-dm_mirror              22289  0 
-dm_region_hash         20813  1 dm_mirror
-dm_log                 18411  2 dm_region_hash,dm_mirror
-dm_mod                123941  14 dm_log,dm_mirror,dm_bufio,dm_thin_pool,dm_snapshot
+<pre><code class="language-bash">ssh-keygen -t rsa -q -f /var/lib/heketi/id_rsa -N ''
+chown heketi:heketi /var/lib/heketi/id_rsa*
+ssh-copy-id -i /var/lib/heketi/id_rsa root@node1
+ssh-copy-id -i /var/lib/heketi/id_rsa root@node2
+ssh-copy-id -i /var/lib/heketi/id_rsa root@node3
 </code></pre>
 
-<p>获取部署文件 （master1 ）</p>
+<p>编写heketi.json 配置文件</p>
 
-<pre><code class="language-shell">git clone https://github.com/gluster/gluster-kubernetes.git
+<pre><code class="language-json">{
+  &quot;_port_comment&quot;: &quot;Heketi Server Port Number&quot;,
+  &quot;port&quot;: &quot;8888&quot;,
+
+	&quot;_enable_tls_comment&quot;: &quot;Enable TLS in Heketi Server&quot;,
+	&quot;enable_tls&quot;: false,
+
+	&quot;_cert_file_comment&quot;: &quot;Path to a valid certificate file&quot;,
+	&quot;cert_file&quot;: &quot;&quot;,
+
+	&quot;_key_file_comment&quot;: &quot;Path to a valid private key file&quot;,
+	&quot;key_file&quot;: &quot;&quot;,
+
+
+  &quot;_use_auth&quot;: &quot;Enable JWT authorization. Please enable for deployment&quot;,
+  &quot;use_auth&quot;: false,
+
+  &quot;_jwt&quot;: &quot;Private keys for access&quot;,
+  &quot;jwt&quot;: {
+    &quot;_admin&quot;: &quot;Admin has access to all APIs&quot;,
+    &quot;admin&quot;: {
+      &quot;_key_comment&quot;: &quot;Set the admin key in the next line&quot;,
+      &quot;key&quot;: &quot;openstack&quot;
+    },
+    &quot;_user&quot;: &quot;User only has access to /volumes endpoint&quot;,
+    &quot;user&quot;: {
+      &quot;_key_comment&quot;: &quot;Set the user key in the next line&quot;,
+      &quot;key&quot;: &quot;openstack&quot;
+    }
+  },
+
+  &quot;_backup_db_to_kube_secret&quot;: &quot;Backup the heketi database to a Kubernetes secret when running in Kubernetes. Default is off.&quot;,
+  &quot;backup_db_to_kube_secret&quot;: false,
+
+  &quot;_profiling&quot;: &quot;Enable go/pprof profiling on the /debug/pprof endpoints.&quot;,
+  &quot;profiling&quot;: false,
+
+  &quot;_glusterfs_comment&quot;: &quot;GlusterFS Configuration&quot;,
+  &quot;glusterfs&quot;: {
+    &quot;_executor_comment&quot;: [
+      &quot;Execute plugin. Possible choices: mock, ssh&quot;,
+      &quot;mock: This setting is used for testing and development.&quot;,
+      &quot;      It will not send commands to any node.&quot;,
+      &quot;ssh:  This setting will notify Heketi to ssh to the nodes.&quot;,
+      &quot;      It will need the values in sshexec to be configured.&quot;,
+      &quot;kubernetes: Communicate with GlusterFS containers over&quot;,
+      &quot;            Kubernetes exec api.&quot;
+    ],
+    &quot;executor&quot;: &quot;ssh&quot;,
+
+    &quot;_sshexec_comment&quot;: &quot;SSH username and private key file information&quot;,
+    &quot;sshexec&quot;: {
+      &quot;keyfile&quot;: &quot;/var/lib/heketi/id_rsa&quot;,
+      &quot;user&quot;: &quot;root&quot;,
+      &quot;port&quot;: &quot;22&quot;,
+      &quot;fstab&quot;: &quot;/etc/fstab&quot;,
+      &quot;pv_data_alignment&quot;: &quot;256K&quot;,
+      &quot;vg_physicalextentsize&quot;: &quot;4MB&quot;,
+      &quot;lv_chunksize&quot;: &quot;256K&quot;,
+      &quot;backup_lvm_metadata&quot;: false,
+      &quot;_debug_umount_failures&quot;: &quot;Optional: boolean to capture more details in case brick unmounting fails&quot;,
+      &quot;debug_umount_failures&quot;: true
+    },
+
+    &quot;_kubeexec_comment&quot;: &quot;Kubernetes configuration&quot;,
+    &quot;kubeexec&quot;: {
+      &quot;host&quot; :&quot;https://kubernetes.host:8443&quot;,
+      &quot;cert&quot; : &quot;/path/to/crt.file&quot;,
+      &quot;insecure&quot;: false,
+      &quot;user&quot;: &quot;kubernetes username&quot;,
+      &quot;password&quot;: &quot;password for kubernetes user&quot;,
+      &quot;namespace&quot;: &quot;OpenShift project or Kubernetes namespace&quot;,
+      &quot;fstab&quot;: &quot;Optional: Specify fstab file on node.  Default is /etc/fstab&quot;,
+      &quot;pv_data_alignment&quot;: &quot;Optional: Specify PV data alignment size. Default is 256K&quot;,
+      &quot;vg_physicalextentsize&quot;: &quot;Optional: Specify VG physical extent size. Default is 4MB&quot;,
+      &quot;lv_chunksize&quot;: &quot;Optional: Specify LV chunksize. Default is 256K&quot;,
+      &quot;xfs_sw&quot;: &quot;Optional: Specify number of data disks in the underlying RAID device.&quot;,
+      &quot;xfs_su&quot;: &quot;Optional: Specifies a stripe unit or RAID chunk size.&quot;,
+      &quot;backup_lvm_metadata&quot;: false,
+      &quot;gluster_cli_timeout&quot;: &quot;Optional: Timeout, in seconds, passed to the gluster cli invocations&quot;,
+      &quot;_debug_umount_failures&quot;: &quot;Optional: boolean to capture more details in case brick unmounting fails&quot;,
+      &quot;debug_umount_failures&quot;: true
+    },
+
+    &quot;_db_comment&quot;: &quot;Database file name&quot;,
+    &quot;db&quot;: &quot;/var/lib/heketi/heketi.db&quot;,
+
+     &quot;_refresh_time_monitor_gluster_nodes&quot;: &quot;Refresh time in seconds to monitor Gluster nodes&quot;,
+    &quot;refresh_time_monitor_gluster_nodes&quot;: 120,
+
+    &quot;_start_time_monitor_gluster_nodes&quot;: &quot;Start time in seconds to monitor Gluster nodes when the heketi comes up&quot;,
+    &quot;start_time_monitor_gluster_nodes&quot;: 10,
+
+    &quot;_loglevel_comment&quot;: [
+      &quot;Set log level. Choices are:&quot;,
+      &quot;  none, critical, error, warning, info, debug&quot;,
+      &quot;Default is warning&quot;
+    ],
+    &quot;loglevel&quot; : &quot;debug&quot;,
+
+    &quot;_auto_create_block_hosting_volume&quot;: &quot;Creates Block Hosting volumes automatically if not found or exsisting volume exhausted&quot;,
+    &quot;auto_create_block_hosting_volume&quot;: true,
+
+    &quot;_block_hosting_volume_size&quot;: &quot;New block hosting volume will be created in size mentioned, This is considered only if auto-create is enabled.&quot;,
+    &quot;block_hosting_volume_size&quot;: 500,
+
+    &quot;_block_hosting_volume_options&quot;: &quot;New block hosting volume will be created with the following set of options. Removing the group gluster-block option is NOT recommended. Additional options can be added next to it separated by a comma.&quot;,
+    &quot;block_hosting_volume_options&quot;: &quot;group gluster-block&quot;,
+
+    &quot;_pre_request_volume_options&quot;: &quot;Volume options that will be applied for all volumes created. Can be overridden by volume options in volume create request.&quot;,
+    &quot;pre_request_volume_options&quot;: &quot;&quot;,
+
+    &quot;_post_request_volume_options&quot;: &quot;Volume options that will be applied for all volumes created. To be used to override volume options in volume create request.&quot;,
+    &quot;post_request_volume_options&quot;: &quot;&quot;
+  }
+}
+
 </code></pre>
 
-<p>修改配置文件 （master1 ）</p>
-
-<pre><code class="language-shell">cp gluster-kubernetes/deploy/topology.json.sample gluster-kubernetes/deploy/topology.json
-</code></pre>
-
-<p>将 topology.json 修改为如下内容，注意 manage 的值必须和kubectl get node 中的的名称一样。</p>
+<p>编写 topology.json 集群配置文件, 注意<code>storage</code> 这个key，如果是部署在K8S集群中的情况下，不需要。</p>
 
 <pre><code class="language-json">{
   &quot;clusters&quot;: [
     {
       &quot;nodes&quot;: [
-        {
-          &quot;node&quot;: {
-            &quot;hostnames&quot;: {
-              &quot;manage&quot;: [
-                &quot;master1&quot;
-              ],
-              &quot;storage&quot;: [
-                &quot;192.168.10.50&quot;
-              ]
-            },
-            &quot;zone&quot;: 1
-          },
-          &quot;devices&quot;: [
-            &quot;/dev/sdb&quot;
-          ]
-        },
         {
           &quot;node&quot;: {
             &quot;hostnames&quot;: {
@@ -470,6 +571,22 @@ dm_mod                123941  14 dm_log,dm_mirror,dm_bufio,dm_thin_pool,dm_snaps
           &quot;devices&quot;: [
             &quot;/dev/sdb&quot;
           ]
+        },
+        {
+          &quot;node&quot;: {
+            &quot;hostnames&quot;: {
+              &quot;manage&quot;: [
+                &quot;node3&quot;
+              ],
+              &quot;storage&quot;: [
+                &quot;192.168.10.53&quot;
+              ]
+            },
+            &quot;zone&quot;: 1
+          },
+          &quot;devices&quot;: [
+            &quot;/dev/sdb&quot;
+          ]
         }
       ]
     }
@@ -477,135 +594,27 @@ dm_mod                123941  14 dm_log,dm_mirror,dm_bufio,dm_thin_pool,dm_snaps
 }
 </code></pre>
 
-<p>修改daemonset 文件</p>
+<p>将 heketi.json， topology.json 移动到/etc/heketi/ 目录下</p>
 
-<pre><code>---
-kind: DaemonSet
-apiVersion: extensions/v1beta1
-metadata:
-  name: glusterfs
-  labels:
-    glusterfs: daemonset
-  annotations:
-    description: GlusterFS DaemonSet
-    tags: glusterfs
-spec:
-  template:
-    metadata:
-      name: glusterfs
-      labels:
-        glusterfs: pod
-        glusterfs-node: pod
-    spec:
-      nodeSelector:
-        storagenode: glusterfs
-      hostNetwork: true
-      tolerations: #因为master 节点不能被调度，所以此处要添加容忍
-        - key: node-role.kubernetes.io/master
-          operator: Exists
-          effect: NoSchedule
-      containers:
-      - image: gluster/gluster-centos:latest
-        imagePullPolicy: IfNotPresent
-        name: glusterfs
-        ............
+<pre><code class="language-bash">mv heketi.json /etc/heketi/
+mv topology.json /etc/heketi/
 </code></pre>
 
-<p>修改 heketi-deployment.yaml</p>
+<p>启动 heketi, 并通过heketi 读取topology.json 文件创建glusterfs 集群。 注意不要通过gluster probe 命令去创建，heketi 会自动创建集群。</p>
 
-<pre><code class="language-yaml">---
-kind: Service
-apiVersion: v1
-metadata:
-  name: heketi
-  labels:
-    glusterfs: heketi-service
-    heketi: service
-  annotations:
-    description: Exposes Heketi Service
-spec:
-  selector:
-    glusterfs: heketi-pod
-  ports:
-  - name: heketi
-    port: 8080
-    targetPort: 8080
-  type: NodePort # 添加nodeport 如果想用ingress，可以不用修改此文件，略过这一步
-</code></pre>
-
-<p>修改 gk-deploy 文件（官方bug），在文件中搜索 &ndash;show-all
-将</p>
-
-<pre><code class="language-shell">  heketi_pod=$(${CLI} get pod --no-headers --show-all --selector=&quot;heketi&quot; | awk '{print $1}')
-</code></pre>
-
-<p>改为</p>
-
-<pre><code class="language-shell">if [[ &quot;${CLI}&quot; =~ ^kubectl ]]; then
-  heketi_pod=$(${CLI} get pod --no-headers --selector=&quot;heketi&quot; | awk '{print $1}')
-else 
-  heketi_pod=$(${CLI} get pod --no-headers --show-all --selector=&quot;heketi&quot; | awk '{print $1}')
-fi
+<pre><code class="language-bash">[root@master1 ~]# systemctl start heketi
+[root@master1 ~]# systemctl enable heketi
+[root@master1 ~]# export HEKETI_CLI_SERVER=http://192.168.10.50:8888
+[root@master1 ~]# heketi-cli topology load --json=/etc/heketi/topology.json
+[root@master1 ~]# heketi-cli cluster list
+Clusters:
+Id:9c483024cc203cde18f4c822fd1c562c [file][block]
 
 </code></pre>
 
-<p>修改 heketi.json.template, 主要添加admin key 与 user key</p>
+<h2 id="验证">验证</h2>
 
-<pre><code class="language-json">{
-	&quot;_port_comment&quot;: &quot;Heketi Server Port Number&quot;,
-	&quot;port&quot; : &quot;8080&quot;,
-
-	&quot;_use_auth&quot;: &quot;Enable JWT authorization. Please enable for deployment&quot;,
-	&quot;use_auth&quot; : false,
-
-	&quot;_jwt&quot; : &quot;Private keys for access&quot;,
-	&quot;jwt&quot; : {
-		&quot;_admin&quot; : &quot;Admin has access to all APIs&quot;,
-		&quot;admin&quot; : {
-			&quot;key&quot; : &quot;openstack&quot;
-		},
-		&quot;_user&quot; : &quot;User only has access to /volumes endpoint&quot;,
-		&quot;user&quot; : {
-			&quot;key&quot; : &quot;openstack&quot;
-		}
-	},
-
-	&quot;_glusterfs_comment&quot;: &quot;GlusterFS Configuration&quot;,
-	&quot;glusterfs&quot; : {
-
-		&quot;_executor_comment&quot;: &quot;Execute plugin. Possible choices: mock, kubernetes, ssh&quot;,
-		&quot;executor&quot; : &quot;${HEKETI_EXECUTOR}&quot;,
-
-		&quot;_db_comment&quot;: &quot;Database file name&quot;,
-		&quot;db&quot; : &quot;/var/lib/heketi/heketi.db&quot;,
-
-		&quot;kubeexec&quot; : {
-			&quot;rebalance_on_expansion&quot;: true
-		},
-
-		&quot;sshexec&quot; : {
-			&quot;rebalance_on_expansion&quot;: true,
-			&quot;keyfile&quot; : &quot;/etc/heketi/private_key&quot;,
-			&quot;port&quot; : &quot;${SSH_PORT}&quot;,
-			&quot;user&quot; : &quot;${SSH_USER}&quot;,
-			&quot;sudo&quot; : ${SSH_SUDO}
-		}
-	},
-
-	&quot;backup_db_to_kube_secret&quot;: false
-}
-</code></pre>
-
-<p>开始部署</p>
-
-<pre><code class="language-shell">./gk-deploy -g -n glusterfs -c kubectl --admin-key openstack --user-key openstack
-</code></pre>
-
-<h1 id="验证安装">验证安装</h1>
-
-<h3 id="创建-storage-class">创建 storage class</h3>
-
-<p>创建storageclass.yaml</p>
+<p>创建 storageclass</p>
 
 <pre><code class="language-yaml">apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -613,10 +622,10 @@ metadata:
   name: glusterfs-storage
 provisioner: kubernetes.io/glusterfs
 parameters:
-  resturl: HEKETI_URL
-  clusterid: CLUSTERID
-  restauthenabled: &quot;true&quot;
-  restuser: &quot;admin&quot; # 此处需要与heketi 实际配置匹配
+  resturl: http://192.168.10.50:8888
+  clusterid: 9c483024cc203cde18f4c822fd1c562c
+  restauthenabled: &quot;false&quot;
+  # restuser: &quot;admin&quot; # 此处需要与heketi 实际配置匹配，当restauthenabled 为false，需要被删除或注释掉
   # secretNamespace: &quot;default&quot;
   # secretName: &quot;heketi-secret&quot;
   #如果使用 secret 可以用如下命令新建对应的secret 
@@ -624,7 +633,7 @@ parameters:
   # --type=&quot;kubernetes.io/glusterfs&quot; --from-literal=key='openstack' \
   # --namespace=default
   # 对应的yaml为 https://github.com/kubernetes/examples/blob/master/staging/persistent-volume-provisioning/glusterfs/glusterfs-secret.yaml
-  restuserkey: &quot;openstack&quot; # 此处需要与heketi 实际配置匹配
+  # restuserkey: &quot;openstack&quot; # 此处需要与heketi 实际配置匹配，当restauthenabled 为false，需要被删除或注释掉
   gidMin: &quot;40000&quot; #存储类的 GID 范围的最小值和最大值。此范围内的唯一值 （GID）将用于动态预配卷。这些是可选值。如果未指定，则卷将预配值介于 2000-2147483647 之间，该值分别默认为 gidMin 和 gidMax。
   gidMax: &quot;50000&quot;
   # volumetype: &quot;replicate:3&quot; #Replica volume
@@ -632,14 +641,7 @@ parameters:
   # volumetype: none  #Distribute volume
 </code></pre>
 
-<p>然后应用</p>
-
-<pre><code class="language-shell">kubectl apply -f storageclass.yaml
-</code></pre>
-
-<h3 id="创建-pvc">创建 PVC</h3>
-
-<p>pvc.yaml</p>
+<p>创建 pvc</p>
 
 <pre><code class="language-yaml">apiVersion: v1
 kind: PersistentVolumeClaim
@@ -655,13 +657,7 @@ spec:
       storage: 1Gi
 </code></pre>
 
-<p>应用</p>
-
-<pre><code class="language-shell">kubectl apply -f pvc.yaml
-kubectl get pvc,pv
-</code></pre>
-
-<h3 id="创建一个pod-使用pvc">创建一个pod 使用pvc</h3>
+<p>创建pod 使用pvc</p>
 
 <p>nginx-test.yaml</p>
 
@@ -704,12 +700,7 @@ curl localhost:1880
 
 <p>解决方法</p>
 
-<p>1 先卸载安装</p>
-
-<pre><code class="language-shell">./gk-deploy -g --abort
-</code></pre>
-
-<p>2 清除 vg</p>
+<p>清除 vg</p>
 
 <pre><code class="language-shell">[root@master1 deploy]# dmsetup ls
 vg_d2ebbc4fc88ce69037db2da2b0a533f7-brick_90a958336d0e5b54b6f5643487805938      (253:6)
@@ -730,12 +721,12 @@ $dmsetup remove vg_d2ebbc4fc88ce69037db2da2b0a533f7-tp_90a958336d0e5b54b6f564348
 
 </code></pre>
 
-<p>3 删除 gluster 相关文件</p>
+<p>删除 gluster 相关文件</p>
 
 <pre><code class="language-shell">rm -rf /var/lib/glusterd
 </code></pre>
 
-<p>4 重置裸盘</p>
+<p>重置裸盘</p>
 
 <pre><code class="language-shell">$dd if=/dev/zero of=/dev/sdb bs=1k count=1
 blockdev --rereadpt /dev/sdb
@@ -764,6 +755,47 @@ blockdev --rereadpt /dev/sdb
 <h4 id="第二种情况">第二种情况</h4>
 
 <p>一般是heketi 初始化集群出现问题，需要删除heketi 的db，然后重新topology load 初始化集群，这个情况非常麻烦，甚至可能需要删除原先存在的volume。通过lsblk 命令查看gluster集群node的块存储情况，理论上应该是一样的，如果不一样，恭喜，需要重新初始化所有的glusterd systemd服务。</p>
+
+<p>电信的错误日志为</p>
+
+<pre><code class="language-bash">Warning  ProvisioningFailed  19s   persistentvolume-controller  Failed to provision volume with StorageClass &quot;glusterfs-storage&quot;: failed to create volume: failed to update endpoint &amp;Endpoints{ObjectMeta:k8s_io_apimachinery_pkg_apis_meta_v1.ObjectMeta{Name:glusterfs-dynamic-4b466ace-efba-48c7-b311-e3ff2a860ef0,GenerateName:,Namespace:default,SelfLink:,UID:,ResourceVersion:,Generation:0,CreationTimestamp:0001-01-01 00:00:00 +0000 UTC,DeletionTimestamp:&lt;nil&gt;,DeletionGracePeriodSeconds:nil,Labels:map[string]string{gluster.kubernetes.io/provisioned-for-pvc: glusterfs-claim,},Annotations:map[string]string{},OwnerReferences:[],Finalizers:[],ClusterName:,Initializers:nil,ManagedFields:[],},Subsets:[{[{node2  &lt;nil&gt; nil} {node3  &lt;nil&gt; nil} {node1  &lt;nil&gt; nil}] [] [{ 1 TCP}]}],}: &lt;nil&gt;
+</code></pre>
+
+<p>出现这个日志，可以去所有glusterfs 的node集群节点，通过lsblk 命令查看，回发先很多不一致的问题。</p>
+
+<p><strong>解决方案</strong>：</p>
+
+<p>裸磁盘创建 device 失败的命令在各个node节点执行一遍。</p>
+
+<p>先卸载整个集群</p>
+
+<p>在node1,2,3 节点删除glusterfs-server</p>
+
+<pre><code class="language-bash">systemctl stop glusterd
+systemctl disable glusterd
+yum erase glusterfs-server
+rm -rf /etc/glusterfs
+rm -rf /var/lib/glusterd
+</code></pre>
+
+<p>在master 节点删除 heketi数据文件</p>
+
+<pre><code class="language-bash">rm /var/lib/heketi/heketi.db
+</code></pre>
+
+<p>重新初始化集群</p>
+
+<p>在node1,2,3 节点重装glusterfs-server</p>
+
+<pre><code class="language-bash">yum install -y glusterfs-server
+systemctl start glusterd
+systemctl enable glusterd
+</code></pre>
+
+<p>在master 节点重新初始化heketi topology</p>
+
+<pre><code class="language-bash">heketi-cli topology load --json=/etc/heketi/topology.json
+</code></pre>
 
   </div>
   <footer>
@@ -802,8 +834,8 @@ blockdev --rereadpt /dev/sdb
 
 <div class="pagination">
   
+    <a href="/blog/deploy-glusterfs-hekti-in-k8s/" class="button big previous"><i class="fas fa-angle-left"></i> kubernetes 集群中部署 glusterfs 与 heketi</a>
   
-    <a href="/blog/deploy-glusterfs-heketi-out-of-k8s/" class="button big next">kubernetes 使用独立 glusterfs &#43; heketi集群 <i class="fas fa-angle-right"></i></a>
   
 </div>
 

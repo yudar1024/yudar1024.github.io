@@ -6,10 +6,22 @@
     <description>Recent content in kubernetes on 陈sir 的流水帐</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 07 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 10 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://yudar1024.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>kubernetes 使用独立 glusterfs &#43; heketi集群</title>
+      <link>https://yudar1024.github.io/blog/deploy-glusterfs-heketi-out-of-k8s/</link>
+      <pubDate>Tue, 10 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://yudar1024.github.io/blog/deploy-glusterfs-heketi-out-of-k8s/</guid>
+      <description>kubernetes 使用独立 glusterfs + heketi集群 主机列表
+   Hostname 服务器IP 存储IP 用途 硬盘信息 容量G     master1 192.168.10.50 192.168.10.50 hekteti server /dev/sdb 300G   node1 192.168.10.51 192.168.10.51 glusterfs /dev/sdb 300G   node2 192.168.10.52 192.168.10.53 glusterfs /dev/sdb 300G   node3 192.168.10.53 192.168.10.53 glusterfs /dev/sdb 300G    所有主机的/etc/hosts均包含
+192.168.10.50 master1 192.168.10.51 node1 192.168.10.52 node2 192.168.10.53 node3  配置所有服务器之间免密登录（可选）
+在node1，node2，node3 安装 glusterfs-server glusterfs-fuse，并加载fuse 内核模块</description>
+    </item>
     
     <item>
       <title>kubernetes 集群中部署 glusterfs 与 heketi</title>
