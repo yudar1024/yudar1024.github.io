@@ -104,7 +104,10 @@ disableLanguages        = [""]
       # Both keys must be present to enable recaptcha
       siteKey           = "" # Site Key
       encryptedKey      = ""
-
+  [params.gittalk]
+    enabled             = true
+    clientID            = "a83bc47e22d46426006c"
+    clientSecret        = "4df05cf9cb02897883f87f3d1c8552ed88d47a2a"
 [menu]
   # Sets the menu items in the navigation bar
   # Identifier prepends a Font Awesome icon to the menu item
