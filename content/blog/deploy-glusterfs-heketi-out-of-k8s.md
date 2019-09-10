@@ -1,3 +1,18 @@
++++
+author = "陈 sir"
+categories = ["kubernetes"]
+tags = ["kubernetes"]
+date = "2019-09-10"
+description = "deploy glusterfs and heketi out of kubernetes"
+featured = ""
+featuredalt = ""
+featuredpath = ""
+linktitle = ""
+title = "kubernetes 使用独立 glusterfs + heketi集群"
+type = "post"
+
++++
+
 # kubernetes 使用独立 glusterfs + heketi集群
 
 **主机列表**
