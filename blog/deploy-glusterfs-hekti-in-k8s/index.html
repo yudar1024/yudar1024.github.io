@@ -247,6 +247,8 @@
       <main id="site-main">
         <article class="post">
   <header>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
   <div class="title">
     
         <h2><a href="/blog/deploy-glusterfs-hekti-in-k8s/">kubernetes 集群中部署 glusterfs 与 heketi</a></h2>
@@ -798,6 +800,21 @@ blockdev --rereadpt /dev/sdb
 
   </footer>
 </article>
+
+    <div id="gitalk-container">
+        <script>
+            var gitalk = new Gitalk({
+  clientID: "a83bc47e22d46426006c",
+  clientSecret: '4df05cf9cb02897883f87f3d1c8552ed88d47a2a',
+  repo: 'yudar1024.github.io',
+  owner: 'yudar1024',
+  admin: ['yudar1024'],
+  distractionFreeMode: false  
+})
+
+gitalk.render('gitalk-container')
+        </script>
+    </div>
 
 
 <div class="pagination">
