@@ -13,7 +13,7 @@ type = "post"
 
 +++
 
-# kubernetes 使用独立 glusterfs + heketi集群
+
 
 **主机列表**
 
