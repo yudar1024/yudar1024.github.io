@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-09-10T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-09-10T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1131">
+<meta itemprop="wordCount" content="1126">
 
 
 
@@ -317,8 +317,6 @@
 
   <div class="content">
     
-
-<h1 id="kubernetes-使用独立-glusterfs-heketi集群">kubernetes 使用独立 glusterfs + heketi集群</h1>
 
 <p><strong>主机列表</strong></p>
 
@@ -842,7 +840,7 @@ systemctl enable glusterd
   owner: 'yudar1024',
   admin: ['yudar1024'],
   id: location.pathname,
-  distractionFreeMode: false  
+  distractionFreeMode: true  
 })
 
 gitalk.render('gitalk-container')
@@ -855,6 +853,8 @@ gitalk.render('gitalk-container')
     <a href="/blog/deploy-glusterfs-hekti-in-k8s/" class="button big previous"><i class="fas fa-angle-left"></i> kubernetes 集群中部署 glusterfs 与 heketi</a>
   
   
+    <a href="/blog/using-heketi-to-maintain-glusterfs/" class="button big next">使用 heketi 维护 glusterfs <i class="fas fa-angle-right"></i></a>
+  
 </div>
 
 
@@ -865,6 +865,17 @@ gitalk.render('gitalk-container')
       <header>
         <h1>最新文章</h1>
       </header>
+      
+      <article class="mini-post">
+        <section>
+          
+
+        </section>
+        <header>
+          <h1><a href="/blog/using-heketi-to-maintain-glusterfs/">使用 heketi 维护 glusterfs</a></h1>
+          <time class="published" datetime="">September 11, 2019</time>
+        </header>
+      </article>
       
       <article class="mini-post">
         <section>
@@ -905,7 +916,7 @@ gitalk.render('gitalk-container')
           
           <li>
             
-              <a href="/categories/kubernetes/">kubernetes<span class="count">2</span></a>
+              <a href="/categories/kubernetes/">kubernetes<span class="count">3</span></a>
             
           
           </li>
