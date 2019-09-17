@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>idea on 陈sir 的流水帐</title>
+    <link>https://yudar1024.github.io/tags/idea/</link>
+    <description>Recent content in idea on 陈sir 的流水帐</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 17 Sep 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://yudar1024.github.io/tags/idea/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>日常软件使用技巧</title>
+      <link>https://yudar1024.github.io/blog/software-knowledge/</link>
+      <pubDate>Tue, 17 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://yudar1024.github.io/blog/software-knowledge/</guid>
+      <description> 换行符问题(LF/CRLF) 将VScode， idea ， sublime text 设置为默认使用 linux 下的换行符
+ vscode： 设置&amp;ndash;》用户设置&amp;ndash;》文本编辑器&amp;ndash;》文件&amp;ndash;》eol， 设置为\n 或者搜索 files:eol 进行设置 idea： File&amp;ndash;》Settings&amp;ndash;》Editor&amp;ndash;》Code Style&amp;ndash;》Line separator 设置为 Unix and OS X（\n） sublime text： Perference-&amp;gt;Setting-User 中加入配置 &amp;quot;default_line_ending&amp;quot;: &amp;quot;unix&amp;quot; 可选项为 system， windows， unix  </description>
+    </item>
+    
+  </channel>
+</rss>
