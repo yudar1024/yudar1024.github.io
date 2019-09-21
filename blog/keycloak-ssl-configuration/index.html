@@ -2,26 +2,34 @@
 <html lang="zh-cn">
   <head>
   <meta charset="utf-8">
-<title>vsc - 陈sir 的流水帐</title>
+<title>Keycloak 配置SSL 实现HTTPS 访问 - 陈sir 的流水帐</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
 
   <meta name="generator" content="Hugo 0.58.1" />
-  <meta itemprop="name" content="vsc">
-<meta itemprop="description" content="要有希望">
+  <meta itemprop="name" content="Keycloak 配置SSL 实现HTTPS 访问">
+<meta itemprop="description" content="Keycloak SSL Configuration">
 
 
-  <meta property="og:title" content="vsc" />
-<meta property="og:description" content="要有希望" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://yudar1024.github.io/tags/vsc/" />
+<meta itemprop="datePublished" content="2019-09-21T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-09-21T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="128">
 
-<meta property="og:updated_time" content="2019-09-17T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
+
+
+<meta itemprop="keywords" content="Keycloak ," />
+
+  <meta property="og:title" content="Keycloak 配置SSL 实现HTTPS 访问" />
+<meta property="og:description" content="Keycloak SSL Configuration" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yudar1024.github.io/blog/keycloak-ssl-configuration/" />
+<meta property="article:published_time" content="2019-09-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-09-21T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
 
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="vsc"/>
-<meta name="twitter:description" content="要有希望"/>
+<meta name="twitter:title" content="Keycloak 配置SSL 实现HTTPS 访问"/>
+<meta name="twitter:description" content="Keycloak SSL Configuration"/>
 <meta name="twitter:site" content="@example"/>
 
   
@@ -54,7 +62,7 @@
       <a href="/">
         
           
-            标签
+            陈 sir 的流水帐
           
         
       </a>
@@ -136,37 +144,37 @@
 
   
     
-    <a href="//twitter.com/share?text=vsc&amp;url=https%3a%2f%2fyudar1024.github.io%2ftags%2fvsc%2f" target="_blank" rel="noopener" class="share-btn twitter">
+    <a href="//twitter.com/share?text=Keycloak%20%e9%85%8d%e7%bd%aeSSL%20%e5%ae%9e%e7%8e%b0HTTPS%20%e8%ae%bf%e9%97%ae&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f" target="_blank" rel="noopener" class="share-btn twitter">
         <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
       </a>
   
 
   
-      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2ftags%2fvsc%2f" target="_blank" rel="noopener" class="share-btn facebook">
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f" target="_blank" rel="noopener" class="share-btn facebook">
         <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
         </a>
   
 
   
-    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2ftags%2fvsc%2f&amp;title=vsc" target="_blank" rel="noopener" class="share-btn reddit">
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f&amp;title=Keycloak%20%e9%85%8d%e7%bd%aeSSL%20%e5%ae%9e%e7%8e%b0HTTPS%20%e8%ae%bf%e9%97%ae" target="_blank" rel="noopener" class="share-btn reddit">
           <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
         </a>
   
 
   
-        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2ftags%2fvsc%2f&amp;title=vsc" target="_blank" rel="noopener" class="share-btn linkedin">
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f&amp;title=Keycloak%20%e9%85%8d%e7%bd%aeSSL%20%e5%ae%9e%e7%8e%b0HTTPS%20%e8%ae%bf%e9%97%ae" target="_blank" rel="noopener" class="share-btn linkedin">
             <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
           </a>
   
 
   
-        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2ftags%2fvsc%2f&amp;description=vsc" target="_blank" rel="noopener" class="share-btn pinterest">
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f&amp;description=Keycloak%20%e9%85%8d%e7%bd%aeSSL%20%e5%ae%9e%e7%8e%b0HTTPS%20%e8%ae%bf%e9%97%ae" target="_blank" rel="noopener" class="share-btn pinterest">
           <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
         </a>
   
 
   
-        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2ftags%2fvsc%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f" target="_blank" class="share-btn email" data-proofer-ignore>
           <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
         </a>
   
@@ -189,8 +197,6 @@
     <footer>
       <ul class="socnet-icons">
         
-    <li><a href="/tags/vsc/index.xml" type="application/rss+xml" target="_blank" title="RSS" class="fas fa-rss"></a></li>
-
 
         <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
 
@@ -239,22 +245,19 @@
 </section>
 
       <main id="site-main">
-        <h1>vsc</h1>
-        
-        
-            <article class="post">
+        <article class="post">
   <header>
   <div class="title">
     
-        <h2><a href="/blog/software-knowledge/">日常软件使用技巧</a></h2>
+        <h2><a href="/blog/keycloak-ssl-configuration/">Keycloak 配置SSL 实现HTTPS 访问</a></h2>
     
     
-        <p>software-knowledge</p>
+        <p>Keycloak SSL Configuration</p>
     
 </div>
   <div class="meta">
-    <time class="published" datetime="2019-09-17 00:00:00 &#43;0000 UTC">
-      September 17, 2019
+    <time class="published" datetime="2019-09-21 00:00:00 &#43;0000 UTC">
+      September 21, 2019
     </time>
     <span class="author">陈 sir</span>
     
@@ -263,16 +266,130 @@
   </div>
 </header>
 
+  <section id="socnet-share">
+    
+
+
+
+
   
-  <a href="/blog/software-knowledge/" class="image featured">
+    
+    <a href="//twitter.com/share?text=Keycloak%20%e9%85%8d%e7%bd%aeSSL%20%e5%ae%9e%e7%8e%b0HTTPS%20%e8%ae%bf%e9%97%ae&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f" target="_blank" rel="noopener" class="share-btn twitter">
+        <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f" target="_blank" rel="noopener" class="share-btn facebook">
+        <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
+        </a>
+  
+
+  
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f&amp;title=Keycloak%20%e9%85%8d%e7%bd%aeSSL%20%e5%ae%9e%e7%8e%b0HTTPS%20%e8%ae%bf%e9%97%ae" target="_blank" rel="noopener" class="share-btn reddit">
+          <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
+        </a>
+  
+
+  
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f&amp;title=Keycloak%20%e9%85%8d%e7%bd%aeSSL%20%e5%ae%9e%e7%8e%b0HTTPS%20%e8%ae%bf%e9%97%ae" target="_blank" rel="noopener" class="share-btn linkedin">
+            <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
+          </a>
+  
+
+  
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f&amp;description=Keycloak%20%e9%85%8d%e7%bd%aeSSL%20%e5%ae%9e%e7%8e%b0HTTPS%20%e8%ae%bf%e9%97%ae" target="_blank" rel="noopener" class="share-btn pinterest">
+          <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fkeycloak-ssl-configuration%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+          <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
+        </a>
+  
+
+
+  </section>
+  
+  <a href="/blog/keycloak-ssl-configuration/" class="image featured">
     <img src="/img/main/title.png" alt="">
   </a>
 
 
-  
-  <p>将VScode， idea ， sublime text 设置为默认使用 linux 下的换行符</p>
+  <div class="content">
+    
+
+<h1 id="生成keystore-jks"># 生成keystore.jks</h1>
+
+<pre><code class="language-bash">keytool -genkeypair -alias keycloak.me -keyalg RSA -keystore keycloak.jks -validity 10950
+</code></pre>
+
+<blockquote>
+<p>注意：CN必须是主机名，也可以是ip但是ip容易变，所以主机名或域名。后面访问的是时候通过在hosts 就文件映射域名到IP, 这里将CN 设置为keycloak.me, 注意alias参数不是设置CN的地方</p>
+</blockquote>
+
+<p>生成好keycloak.jks 之后 复制到 keycloak-7.0.0\standalone\configuration\ 文件夹内</p>
+
+<h1 id="修改standalone-xml-或-standalone-ha-xml-或-domain-xml">修改standalone.xml 或 standalone-ha.xml 或 domain.xml</h1>
+
+<p>具体修哪个文件，看你的安装方式，此处使用standalone.xml</p>
+
+<p>在 <security-realm name="ApplicationRealm"> 下添加</p>
+
+<pre><code class="language-xml">&lt;security-realm name=&quot;ApplicationRealm&quot;&gt;
+                &lt;server-identities&gt;
+                    &lt;ssl&gt;
+                        &lt;keystore path=&quot;application.keystore&quot; relative-to=&quot;jboss.server.config.dir&quot; keystore-password=&quot;password&quot; alias=&quot;server&quot; key-password=&quot;password&quot; generate-self-signed-certificate-host=&quot;localhost&quot; /&gt;
+                    &lt;/ssl&gt;
+                &lt;/server-identities&gt;
+                &lt;authentication&gt;
+                    &lt;local default-user=&quot;$local&quot; allowed-users=&quot;*&quot; skip-group-loading=&quot;true&quot; /&gt;
+                    &lt;properties path=&quot;application-users.properties&quot; relative-to=&quot;jboss.server.config.dir&quot; /&gt;
+                &lt;/authentication&gt;
+                &lt;authorization&gt;
+                    &lt;properties path=&quot;application-roles.properties&quot; relative-to=&quot;jboss.server.config.dir&quot; /&gt;
+                &lt;/authorization&gt;
+            &lt;/security-realm&gt;
+&lt;!-- 添加的部分 --&gt;
+            &lt;security-realm name=&quot;UndertowRealm&quot;&gt;
+                &lt;server-identities&gt;
+                    &lt;ssl&gt;
+                        &lt;keystore path=&quot;keycloak.jks&quot; relative-to=&quot;jboss.server.config.dir&quot; keystore-password=&quot;openstack&quot; alias=&quot;keycloak.me&quot; /&gt;
+                    &lt;/ssl&gt;
+                &lt;/server-identities&gt;
+            &lt;/security-realm&gt;
+&lt;!-- 添加的部分 end --&gt;
+</code></pre>
+
+<p>然后 搜索 <code>&lt;server name=&quot;default-server&quot;&gt;</code></p>
+
+<p>修改为如下内容,</p>
+
+<pre><code class="language-xml"> &lt;server name=&quot;default-server&quot;&gt;
+                &lt;http-listener name=&quot;default&quot; socket-binding=&quot;http&quot; redirect-socket=&quot;https&quot; enable-http2=&quot;true&quot; /&gt;
+     &lt;!-- 修改https 的 security realm 为UndertowRealm， 默认为 ApplicationRealm--&gt;
+                &lt;https-listener name=&quot;https&quot; socket-binding=&quot;https&quot; security-realm=&quot;UndertowRealm&quot; enable-http2=&quot;true&quot; /&gt;
+                &lt;host name=&quot;default-host&quot; alias=&quot;localhost&quot;&gt;
+                    &lt;location name=&quot;/&quot; handler=&quot;welcome-content&quot; /&gt;
+                    &lt;http-invoker security-realm=&quot;ApplicationRealm&quot; /&gt;
+                &lt;/host&gt;
+            &lt;/server&gt;
+</code></pre>
+
+<p>重新启动 standalone.bat</p>
+
+<h1 id="修改host文件">修改host文件</h1>
+
+<p>添加</p>
+
+<pre><code class="language-ini">127.0.0.1 keycloak.me
+</code></pre>
+
+<p>访问<a href="https://keycloak.me:8443/auth">https://keycloak.me:8443/auth</a></p>
+
+  </div>
   <footer>
-    <a href="/blog/software-knowledge/" class="button big">阅读全文</a>
     <ul class="stats">
   
     
@@ -281,7 +398,7 @@
         <ul>
           
             
-            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/software-knowledge">software-knowledge</a></li>
+            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/keycloak">Keycloak </a></li>
           
         </ul>
       </li>
@@ -294,13 +411,7 @@
         <ul>
           
             
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/vsc">vsc</a></li>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/idea">idea</a></li>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/sublimetext">sublimetext</a></li>
+            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/keycloak">Keycloak </a></li>
           
         </ul>
       </li>
@@ -311,16 +422,14 @@
   </footer>
 </article>
 
-        
-        
+
 <div class="pagination">
   
-    <a href="#" class="disabled button big previous"><i class="fas fa-angle-left"></i></a>
+    <a href="/blog/software-knowledge/" class="button big previous"><i class="fas fa-angle-left"></i> 日常软件使用技巧</a>
   
-  
-    <a href="#" class="disabled button big next"><i class="fas fa-angle-right"></i></a>
   
 </div>
+
 
       </main>
       <section id="site-sidebar">
@@ -456,8 +565,6 @@
   
       <ul class="socnet-icons">
         
-    <li><a href="/tags/vsc/index.xml" type="application/rss+xml" target="_blank" title="RSS" class="fas fa-rss"></a></li>
-
 
         <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
 

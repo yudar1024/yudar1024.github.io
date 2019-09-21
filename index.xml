@@ -6,10 +6,23 @@
     <description>Recent content on 陈sir 的流水帐</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 17 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 21 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://yudar1024.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Keycloak 配置SSL 实现HTTPS 访问</title>
+      <link>https://yudar1024.github.io/blog/keycloak-ssl-configuration/</link>
+      <pubDate>Sat, 21 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://yudar1024.github.io/blog/keycloak-ssl-configuration/</guid>
+      <description># 生成keystore.jks keytool -genkeypair -alias keycloak.me -keyalg RSA -keystore keycloak.jks -validity 10950   注意：CN必须是主机名，也可以是ip但是ip容易变，所以主机名或域名。后面访问的是时候通过在hosts 就文件映射域名到IP, 这里将CN 设置为keycloak.me, 注意alias参数不是设置CN的地方
+ 生成好keycloak.jks 之后 复制到 keycloak-7.0.0\standalone\configuration\ 文件夹内
+修改standalone.xml 或 standalone-ha.xml 或 domain.xml 具体修哪个文件，看你的安装方式，此处使用standalone.xml
+在 下添加
+&amp;lt;security-realm name=&amp;quot;ApplicationRealm&amp;quot;&amp;gt; &amp;lt;server-identities&amp;gt; &amp;lt;ssl&amp;gt; &amp;lt;keystore path=&amp;quot;application.keystore&amp;quot; relative-to=&amp;quot;jboss.server.config.dir&amp;quot; keystore-password=&amp;quot;password&amp;quot; alias=&amp;quot;server&amp;quot; key-password=&amp;quot;password&amp;quot; generate-self-signed-certificate-host=&amp;quot;localhost&amp;quot; /&amp;gt; &amp;lt;/ssl&amp;gt; &amp;lt;/server-identities&amp;gt; &amp;lt;authentication&amp;gt; &amp;lt;local default-user=&amp;quot;$local&amp;quot; allowed-users=&amp;quot;*&amp;quot; skip-group-loading=&amp;quot;true&amp;quot; /&amp;gt; &amp;lt;properties path=&amp;quot;application-users.properties&amp;quot; relative-to=&amp;quot;jboss.server.config.dir&amp;quot; /&amp;gt; &amp;lt;/authentication&amp;gt; &amp;lt;authorization&amp;gt; &amp;lt;properties path=&amp;quot;application-roles.properties&amp;quot; relative-to=&amp;quot;jboss.server.config.dir&amp;quot; /&amp;gt; &amp;lt;/authorization&amp;gt; &amp;lt;/security-realm&amp;gt; &amp;lt;!-- 添加的部分 --&amp;gt; &amp;lt;security-realm name=&amp;quot;UndertowRealm&amp;quot;&amp;gt; &amp;lt;server-identities&amp;gt; &amp;lt;ssl&amp;gt; &amp;lt;keystore path=&amp;quot;keycloak.</description>
+    </item>
     
     <item>
       <title>日常软件使用技巧</title>
