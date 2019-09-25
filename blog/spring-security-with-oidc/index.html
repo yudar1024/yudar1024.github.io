@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+  <meta charset="utf-8">
+<title>spring security 与 keyclaok 集成，使用 oidc 登录 - 陈sir 的流水帐</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+  <meta name="generator" content="Hugo 0.58.0" />
+  <meta itemprop="name" content="spring security 与 keyclaok 集成，使用 oidc 登录">
+<meta itemprop="description" content="oidc spring security">
+
+
+<meta itemprop="datePublished" content="2019-09-25T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-09-25T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="559">
+
+
+
+<meta itemprop="keywords" content="spring security,oauth2,oidc," />
+
+  <meta property="og:title" content="spring security 与 keyclaok 集成，使用 oidc 登录" />
+<meta property="og:description" content="oidc spring security" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yudar1024.github.io/blog/spring-security-with-oidc/" />
+<meta property="article:published_time" content="2019-09-25T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-09-25T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="spring security 与 keyclaok 集成，使用 oidc 登录"/>
+<meta name="twitter:description" content="oidc spring security"/>
+<meta name="twitter:site" content="@example"/>
+
+  
+
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/github.min.css">
+  
+    
+      <link rel="stylesheet" href="/css/normalize.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,800,900|Source+Sans+Pro:400,700">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" integrity="sha384-i1LQnF23gykqWXg6jxC2ZbCbUMxyw5gLZY6UiUS98LYV5unm8GWmfkIS6jqJfb4E" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" />
+      
+      
+      <link rel="stylesheet" href="/css/main.min.df53c1edadafb8a1aaadcf6624a13b50f5d7bc72fd7e046927c32c5ea541e244.css" integrity="sha256-31PB7a2vuKGqrc9mJKE7UPXXvHL9fgRpJ8MsXqVB4kQ=">
+      <link rel="stylesheet" href="/css/add-on.css">
+    
+  
+  
+  
+  
+</head>
+
+  <body>
+    
+<header id="site-header">
+  <nav id="site-nav">
+    <h1 class="nav-title">
+      <a href="/">
+        
+          
+            陈 sir 的流水帐
+          
+        
+      </a>
+    </h1>
+    <menu id="site-nav-menu" class="flyout-menu">
+      
+        
+          
+          
+            <a href="/" class="link"><i class='fa fa-home'></i> 主页</a>
+          
+        
+      
+        
+          
+          
+            <a href="/about/" class="link"><i class='far fa-id-card'></i> 关于我</a>
+          
+        
+      
+        
+          
+          
+            <a href="/blog/" class="link"><i class='far fa-newspaper'></i> 日志</a>
+          
+        
+      
+        
+          
+          
+            <a href="/categories/" class="link"><i class='fas fa-sitemap'></i> 类别</a>
+          
+        
+      
+        
+          
+          
+            <a href="/tags/" class="link"><i class='fas fa-sitemap'></i> 标签</a>
+          
+        
+      
+        
+          
+          
+            <a href="/contact/" class="link"><i class='far fa-envelope'></i> 别来无恙</a>
+          
+        
+      
+      <a href="#share-menu" class="share-toggle"><i class="fas fa-share-alt">&nbsp;</i>Share</a>
+      
+
+    </menu>
+    
+
+    <a href="#share-menu" class="share-toggle"><i class="fas fa-share-alt fa-2x">&nbsp;</i></a>
+    <a href="#lang-menu" class="lang-toggle" lang="zh-cn">zh-cn</a>
+    <a href="#site-nav" class="nav-toggle"><i class="fas fa-bars fa-2x"></i></a>
+  </nav>
+  <menu id="lang-menu" class="flyout-menu">
+  <a href="#" lang="zh-cn" class="link active">中文 (zh-cn)</a>
+  
+    
+      
+        <a href="/en" lang="en" class="no-lang link">English (en)</a>
+      
+    
+      
+    
+  
+</menu>
+
+  
+    <menu id="share-menu" class="flyout-menu">
+      <h1>Share Post</h1>
+      
+
+
+
+
+  
+    
+    <a href="//twitter.com/share?text=spring%20security%20%e4%b8%8e%20keyclaok%20%e9%9b%86%e6%88%90%ef%bc%8c%e4%bd%bf%e7%94%a8%20oidc%20%e7%99%bb%e5%bd%95&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f" target="_blank" rel="noopener" class="share-btn twitter">
+        <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f" target="_blank" rel="noopener" class="share-btn facebook">
+        <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
+        </a>
+  
+
+  
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f&amp;title=spring%20security%20%e4%b8%8e%20keyclaok%20%e9%9b%86%e6%88%90%ef%bc%8c%e4%bd%bf%e7%94%a8%20oidc%20%e7%99%bb%e5%bd%95" target="_blank" rel="noopener" class="share-btn reddit">
+          <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
+        </a>
+  
+
+  
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f&amp;title=spring%20security%20%e4%b8%8e%20keyclaok%20%e9%9b%86%e6%88%90%ef%bc%8c%e4%bd%bf%e7%94%a8%20oidc%20%e7%99%bb%e5%bd%95" target="_blank" rel="noopener" class="share-btn linkedin">
+            <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
+          </a>
+  
+
+  
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f&amp;description=spring%20security%20%e4%b8%8e%20keyclaok%20%e9%9b%86%e6%88%90%ef%bc%8c%e4%bd%bf%e7%94%a8%20oidc%20%e7%99%bb%e5%bd%95" target="_blank" rel="noopener" class="share-btn pinterest">
+          <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+          <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
+        </a>
+  
+
+
+    </menu>
+  
+</header>
+
+    <div id="wrapper">
+      <section id="site-intro">
+  <a href="/"><img src="/img/main/logo.jpg" class="circle" width="" alt="Hugo Future Imperfect Slim" /></a>
+  <header>
+    <h1>陈sir</h1>
+  </header>
+  <main>
+    <p>因为技术能树点歪了而成为云计算架构师</p>
+  </main>
+  
+    <footer>
+      <ul class="socnet-icons">
+        
+
+        <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/example" target="_blank" rel="noopener" title="Flickr" class="fab fa-flickr"></a></li>
+
+
+
+
+<li><a href="//linkedin.com/in/example" target="_blank" rel="noopener" title="LinkedIn" class="fab fa-linkedin"></a></li>
+<li><a href="//linkedin.com/company/examplebusiness" target="_blank" rel="noopener" title="LinkedIn Company" class="fab fa-linkedin"></a></li>
+
+
+
+<li><a href="//facebook.com/example" target="_blank" rel="noopener" title="Facebook" class="fab fa-facebook"></a></li>
+<li><a href="//reddit.com/user/example" target="_blank" rel="noopener" title="Reddit" class="fab fa-reddit"></a></li>
+
+
+
+
+
+
+
+<li><a href="//instagram.com/example" target="_blank" rel="noopener" title="Instagram" class="fab fa-instagram"></a></li>
+
+<li><a href="//twitter.com/example" target="_blank" rel="noopener" title="Twitter" class="fab fa-twitter"></a></li>
+
+
+<li><a href="//pinterest.com/example" target="_blank" rel="noopener" title="Pinterest" class="fab fa-pinterest-p"></a></li>
+<li><a href="//telegram.me/example" target="_blank" rel="noopener" title="telegram" class="fab fa-telegram"></a></li>
+
+
+
+<li><a href="//researchgate.net/profile/example" target="_blank" rel="noopener" title="Research Gate"><i class="ai ai-researchgate"></i></a></li>
+<li><a href="//keybase.io/example" target="_blank" rel="noopener" title="keybase" class="fab fa-keybase"></a></li>
+<li><a href="//example.com/@example" target="_blank" rel="noopener" title="mastodon" class="fab fa-mastodon"></a></li>
+<li><a href="mailto:cen1024@163.com" target="_blank" title="Email" class="far fa-envelope"></a></li>
+
+      </ul>
+    </footer>
+  
+</section>
+
+      <main id="site-main">
+        <article class="post">
+  <header>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <div class="title">
+    
+        <h2><a href="/blog/spring-security-with-oidc/">spring security 与 keyclaok 集成，使用 oidc 登录</a></h2>
+    
+    
+        <p>oidc spring security</p>
+    
+</div>
+  <div class="meta">
+    <time class="published" datetime="2019-09-25 00:00:00 &#43;0000 UTC">
+      September 25, 2019
+    </time>
+    <span class="author">陈 sir</span>
+    
+      <p>3 分钟</p>
+    
+  </div>
+</header>
+
+  <section id="socnet-share">
+    
+
+
+
+
+  
+    
+    <a href="//twitter.com/share?text=spring%20security%20%e4%b8%8e%20keyclaok%20%e9%9b%86%e6%88%90%ef%bc%8c%e4%bd%bf%e7%94%a8%20oidc%20%e7%99%bb%e5%bd%95&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f" target="_blank" rel="noopener" class="share-btn twitter">
+        <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f" target="_blank" rel="noopener" class="share-btn facebook">
+        <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
+        </a>
+  
+
+  
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f&amp;title=spring%20security%20%e4%b8%8e%20keyclaok%20%e9%9b%86%e6%88%90%ef%bc%8c%e4%bd%bf%e7%94%a8%20oidc%20%e7%99%bb%e5%bd%95" target="_blank" rel="noopener" class="share-btn reddit">
+          <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
+        </a>
+  
+
+  
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f&amp;title=spring%20security%20%e4%b8%8e%20keyclaok%20%e9%9b%86%e6%88%90%ef%bc%8c%e4%bd%bf%e7%94%a8%20oidc%20%e7%99%bb%e5%bd%95" target="_blank" rel="noopener" class="share-btn linkedin">
+            <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
+          </a>
+  
+
+  
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f&amp;description=spring%20security%20%e4%b8%8e%20keyclaok%20%e9%9b%86%e6%88%90%ef%bc%8c%e4%bd%bf%e7%94%a8%20oidc%20%e7%99%bb%e5%bd%95" target="_blank" rel="noopener" class="share-btn pinterest">
+          <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fspring-security-with-oidc%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+          <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
+        </a>
+  
+
+
+  </section>
+  
+  <a href="/blog/spring-security-with-oidc/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+  <div class="content">
+    
+
+<h1 id="核心代码">核心代码</h1>
+
+<p>securityConfiguration.java 文件</p>
+
+<pre><code class="language-java">package com.mycompany.gateway.config;
+
+import com.mycompany.gateway.security.*;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import com.mycompany.gateway.security.oauth2.AudienceValidator;
+import com.mycompany.gateway.security.SecurityUtils;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.*;
+import com.mycompany.gateway.security.oauth2.AuthorizationHeaderFilter;
+import com.mycompany.gateway.security.oauth2.AuthorizationHeaderUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
+import java.util.*;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import com.mycompany.gateway.security.oauth2.JwtAuthorityExtractor;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.web.filter.CorsFilter;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Import(SecurityProblemSupport.class)
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final CorsFilter corsFilter;
+// 这里的key，需要和application.yaml 中的 issuer-uri 的key对应
+    @Value(&quot;${spring.security.oauth2.client.provider.keycloak.issuer-uri}&quot;)
+    private String issuerUri;
+
+    private final JwtAuthorityExtractor jwtAuthorityExtractor;
+    private final SecurityProblemSupport problemSupport;
+
+    public SecurityConfiguration(CorsFilter corsFilter, JwtAuthorityExtractor jwtAuthorityExtractor, SecurityProblemSupport problemSupport) {
+        this.corsFilter = corsFilter;
+        this.problemSupport = problemSupport;
+        this.jwtAuthorityExtractor = jwtAuthorityExtractor;
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring()
+            .antMatchers(HttpMethod.OPTIONS, &quot;/**&quot;)
+            .antMatchers(&quot;/app/**/*.{js,html}&quot;)
+            .antMatchers(&quot;/i18n/**&quot;)
+            .antMatchers(&quot;/content/**&quot;)
+            .antMatchers(&quot;/h2-console/**&quot;)
+            .antMatchers(&quot;/swagger-ui/index.html&quot;)
+            .antMatchers(&quot;/test/**&quot;);
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        // @formatter:off
+        http
+            .csrf()
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+            .addFilterBefore(corsFilter, CsrfFilter.class)
+            .exceptionHandling()
+            .accessDeniedHandler(problemSupport)
+        .and()
+            .headers()
+            .contentSecurityPolicy(&quot;default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:&quot;)
+        .and()
+            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+        .and()
+            .featurePolicy(&quot;geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'&quot;)
+        .and()
+            .frameOptions()
+            .deny()
+        .and()
+            .authorizeRequests()
+            .antMatchers(&quot;/api/auth-info&quot;).permitAll()
+            .antMatchers(&quot;/api/**&quot;).authenticated()
+            .antMatchers(&quot;/management/health&quot;).permitAll()
+            .antMatchers(&quot;/management/info&quot;).permitAll()
+            .antMatchers(&quot;/management/prometheus&quot;).permitAll()
+            .antMatchers(&quot;/management/**&quot;).hasAuthority(AuthoritiesConstants.ADMIN)
+        .and()
+//            启用oauth2
+            .oauth2Login()
+        .and()
+            .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(jwtAuthorityExtractor)
+                .and()
+            .and()
+                .oauth2Client();
+        // @formatter:on
+    }
+
+    /**
+     * Map authorities from &quot;groups&quot; or &quot;roles&quot; claim in ID Token.
+     *
+     * @return a {@link GrantedAuthoritiesMapper} that maps groups from
+     * the IdP to Spring Security Authorities.
+     */
+    @Bean
+    public GrantedAuthoritiesMapper userAuthoritiesMapper() {
+        return (authorities) -&gt; {
+            Set&lt;GrantedAuthority&gt; mappedAuthorities = new HashSet&lt;&gt;();
+
+            authorities.forEach(authority -&gt; {
+                OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
+            });
+            return mappedAuthorities;
+        };
+    }
+
+    @Bean
+    JwtDecoder jwtDecoder() {
+        NimbusJwtDecoderJwkSupport jwtDecoder = (NimbusJwtDecoderJwkSupport)
+            JwtDecoders.fromOidcIssuerLocation(issuerUri);
+
+        OAuth2TokenValidator&lt;Jwt&gt; audienceValidator = new AudienceValidator();
+        OAuth2TokenValidator&lt;Jwt&gt; withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator&lt;Jwt&gt; withAudience = new DelegatingOAuth2TokenValidator&lt;&gt;(withIssuer, audienceValidator);
+
+        jwtDecoder.setJwtValidator(withAudience);
+
+        return jwtDecoder;
+    }
+
+    @Bean
+    public AuthorizationHeaderFilter authHeaderFilter(AuthorizationHeaderUtil headerUtil) {
+        return new AuthorizationHeaderFilter(headerUtil);
+    }
+}
+</code></pre>
+
+<p>application.yaml</p>
+
+<pre><code class="language-yaml">spring:
+  security:
+    oauth2:
+      client:
+        provider:
+        # 可以配置多个provider
+          keycloak:
+          # issuer-uri 是keycloak realm 的地址，模式为http://localhost:9000/auth/realms/&lt;realm-name&gt;
+            issuer-uri: http://localhost:9000/auth/realms/jhipster
+        registration:
+        # registration 下的 keyclaok 会生成一个 http://&lt;yourserviceip&gt;:&lt;port&gt;/oauth2/authorization/keycloak 的地址,
+        #浏览器访问这个地址会被重定向到 keycloak 的登录地址。如果把keycloak 改为oidc 那么生成的地址就为 http://&lt;yourserviceip&gt;:&lt;port&gt;/oauth2/authorization/keycloak 
+        # 可以配置多个 registration，对应的配置类 OAuth2ClientProperties
+          keycloak:
+            provider: keycloak
+            client-id: web_app
+            client-secret: web_app
+</code></pre>
+
+<h1 id="认证流程">认证流程</h1>
+
+<p>如果你访问一个未授权的资源，spring securety 会强制重定向到
+<code>http://localhost:8080/oauth2/authorization/keycloak</code>（假设应用在8080端口启动）
+<code>OAuth2LoginAuthenticationFilter</code> 会监听 <code>oauth2/authorization</code> 这个 url 模式，并重定向到对应的 identity provider，在本例中就是配置的 <code>keycloak</code> 所以完整的地址就是<code>http://localhost:8080/oauth2/authorization/keycloak</code></p>
+
+<blockquote>
+<p>如果你配置了多个identity provider，并且想要选择使用哪个identity provider 进行登录，spring security 在启用 oauth 2 之后会在在 <code>http://&lt;serverip&gt;:&lt;port&gt;/login</code> URL 上生成一个默认页面，该页面会列出所有的可用 oauth2 provider</p>
+</blockquote>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="Gallery Name" href="/img/main//loginpage.jpg" data-caption="loginpage.jpg"><img src="/img/main//loginpage.jpg"></a>
+    <div class="caption">loginpage.jpg</div>
+  </div>
+
+
+
+<p>列出的identity provider 会显示 identity provider的 <code>issuer-uri</code> 地址,而实际的连接地址是
+<code>http://&lt;yourserviceip&gt;:&lt;port&gt;/oauth2/authorization/&lt;provider&gt;</code> 这个地址是在跳转到keycloak 注册的realm的登录地址。</p>
+
+<p>当在 keycloak 完成登录后，keycloak 会重定向到 client 配置的redirect url(此处配置为localhost:*)，并在后面追加 <code>/login/oauth2/code/&lt;provider&gt;</code> 因为认证流程中的过滤器<code>OAuth2LoginAuthenticationFilter</code> 监听 <code>/login/oauth2/code/*</code> 这个地址</p>
+
+<pre><code class="language-java">public class OAuth2LoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    public static final String DEFAULT_FILTER_PROCESSES_URI = &quot;/login/oauth2/code/*&quot;;
+</code></pre>
+
+<p><code>OAuth2LoginAuthenticationFilter</code> 会使用 <code>OidcAuthorizationCodeAuthenticationProvider</code> 作为认证代理进行相关认证。
+<code>OidcAuthorizationCodeAuthenticationProvider</code> 主要做了以下三件事情
+1. 将 AuthorizationCode 换成 token
+2. 验证id token
+3. 通过 user info endpoint 获取用户信息， user info endpoint 可以通过 identity provider 的 well known configuration 地址查看 对keycloak 的 realm 来说，就是
+<code>http://localhost:9000/auth/realms/&lt;realm-name&gt;/.well-known/openid-configuration</code></p>
+
+<h1 id="定制化">定制化</h1>
+
+<h2 id="1-修改-oauth2loginauthenticationfilter-的监听地址">1. 修改 OAuth2LoginAuthenticationFilter 的监听地址</h2>
+
+<p>十分常见的一个场景是，修改 <code>OAuth2LoginAuthenticationFilter</code> 的redirect 监听地址。比如想要将 <code>/login/oauth2/code/*</code> 这个地址，修改为 <code>/oauth/callback/*</code> 修改代码如下</p>
+
+<pre><code class="language-java"> @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .oauth2Login()
+                .redirectionEndpoint()
+                .baseUri(&quot;/oauth/callback/*&quot;)
+
+    }
+</code></pre>
+
+<h2 id="2-获取当前账户信息">2. 获取当前账户信息</h2>
+
+<pre><code class="language-java">(OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication()
+</code></pre>
+
+<p>或者</p>
+
+<pre><code class="language-java"> @GetMapping(&quot;/me&quot;)
+ public ResponseEntity&lt;OAuth2AuthenticationToken&gt; hello(currentUser: OAuth2AuthenticationToken)  {
+        return ResponseEntity.ok(currentUser)
+}
+</code></pre>
+
+<h2 id="3-获取-token-相关信息">3. 获取 token 相关信息</h2>
+
+<p>在openid connect 认证流程中，应用将获得三种token <code>access token</code>，<code>id token</code>，<code>refresh token</code>，<code>OAuth2AuthorizedClientService</code> 保存了三种token的信息，可以通过如下方式获取。</p>
+
+<pre><code class="language-java"> val currentUser = SecurityContextHolder.getContext().authentication as OAuth2AuthenticationToken
+ val currentUserClientConfig = oAuth2AuthorizedClientService.loadAuthorizedClient(
+                authorizedClientRegistrationId,
+                currentUser.name)
+  println(&quot;AccessToken: ${currentUserClientConfig.accessToken.tokenValue}&quot;)
+  println(&quot;RefreshToken: ${currentUserClientConfig.refreshToken.tokenValue}&quot;)
+</code></pre>
+
+<h2 id="4-刷新token">4 刷新token</h2>
+
+<p>当token 过期 resource server 会返回401，最简单的处理方法就是抛出 <code>OAuth2AuthorizationException</code>，这样会自动触发登录流程。但是我们也可以通过程序自动刷新token</p>
+
+<p><a href="https://dev.to/shyamala_u/spring-boot--spring-security-5--oauth2oidc-client---basics-4ibo">参考文档 Spring boot + Spring Security 5 + OAuth2/OIDC Client - Basics</a>
+<a href="https://dev.to/shyamala_u/spring-boot--spring-security-5--oauth2oidc-client---deep-dive-261l">参考文档 Spring boot + Spring Security 5 + OAuth2/OIDC Client - Deep Dive</a></p>
+
+  </div>
+  <footer>
+    <ul class="stats">
+  
+    
+    
+      <li class="categories">
+        <ul>
+          
+            
+            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/%E5%AE%89%E5%85%A8">安全</a></li>
+          
+        </ul>
+      </li>
+    
+  
+  
+    
+    
+      <li class="tags">
+        <ul>
+          
+            
+            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/spring-security">spring security</a></li>
+          
+            
+            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/oauth2">oauth2</a></li>
+          
+            
+            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/oidc">oidc</a></li>
+          
+        </ul>
+      </li>
+    
+  
+</ul>
+
+  </footer>
+</article>
+
+    <div id="gitalk-container">
+        <script>
+            var gitalk = new Gitalk({
+  clientID: "a83bc47e22d46426006c",
+  clientSecret: '4df05cf9cb02897883f87f3d1c8552ed88d47a2a',
+  repo: 'yudar1024.github.io',
+  owner: 'yudar1024',
+  admin: ['yudar1024'],
+  id: location.pathname,
+  distractionFreeMode: true  
+})
+
+gitalk.render('gitalk-container')
+        </script>
+    </div>
+
+
+<div class="pagination">
+  
+    <a href="/blog/service-introduction/" class="button big previous"><i class="fas fa-angle-left"></i> kubernetes service 介绍</a>
+  
+  
+</div>
+
+
+      </main>
+      <section id="site-sidebar">
+  
+    <section id="recent-posts">
+      <header>
+        <h1>最新文章</h1>
+      </header>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/spring-security-with-oidc/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/spring-security-with-oidc/">spring security 与 keyclaok 集成，使用 oidc 登录</a></h1>
+          <time class="published" datetime="">September 25, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/service-introduction/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/service-introduction/">kubernetes service 介绍</a></h1>
+          <time class="published" datetime="">September 23, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/keycloak-ssl-configuration/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/keycloak-ssl-configuration/">Keycloak 配置SSL 实现HTTPS 访问</a></h1>
+          <time class="published" datetime="">September 21, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/software-knowledge/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/software-knowledge/">日常软件使用技巧</a></h1>
+          <time class="published" datetime="">September 17, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/using-heketi-to-maintain-glusterfs/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/using-heketi-to-maintain-glusterfs/">使用 heketi 维护 glusterfs</a></h1>
+          <time class="published" datetime="">September 11, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/deploy-glusterfs-heketi-out-of-k8s/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/deploy-glusterfs-heketi-out-of-k8s/">kubernetes 使用独立 glusterfs &#43; heketi集群</a></h1>
+          <time class="published" datetime="">September 10, 2019</time>
+        </header>
+      </article>
+      
+      
+        <a href="/blog/" class="button">查看更多</a>
+      
+    </section>
+  
+
+  
+    
+      <section id="categories">
+        <header>
+          <h1><a href="/categories">分类</a></h1>
+        </header>
+        <ul>
+          
+            
+          
+          
+          <li>
+            
+              <a href="/categories/kubernetes/">kubernetes<span class="count">4</span></a>
+            
+          
+          <li>
+            
+              <a href="/categories/keycloak/">keycloak<span class="count">1</span></a>
+            
+          
+          <li>
+            
+              <a href="/categories/software-knowledge/">software-knowledge<span class="count">1</span></a>
+            
+          
+          <li>
+            
+              <a href="/categories/%E5%AE%89%E5%85%A8/">安全<span class="count">1</span></a>
+            
+          
+          </li>
+        </ul>
+      </section>
+    
+  
+
+  <section id="mini-bio">
+    <header>
+      <h1>关于</h1>
+    </header>
+    <p>时光记录</p>
+    <footer>
+      <a href="/about" class="button">了解更多</a>
+    </footer>
+  </section>
+</section>
+
+      <footer id="site-footer">
+  
+      <ul class="socnet-icons">
+        
+
+        <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/example" target="_blank" rel="noopener" title="Flickr" class="fab fa-flickr"></a></li>
+
+
+
+
+<li><a href="//linkedin.com/in/example" target="_blank" rel="noopener" title="LinkedIn" class="fab fa-linkedin"></a></li>
+<li><a href="//linkedin.com/company/examplebusiness" target="_blank" rel="noopener" title="LinkedIn Company" class="fab fa-linkedin"></a></li>
+
+
+
+<li><a href="//facebook.com/example" target="_blank" rel="noopener" title="Facebook" class="fab fa-facebook"></a></li>
+<li><a href="//reddit.com/user/example" target="_blank" rel="noopener" title="Reddit" class="fab fa-reddit"></a></li>
+
+
+
+
+
+
+
+<li><a href="//instagram.com/example" target="_blank" rel="noopener" title="Instagram" class="fab fa-instagram"></a></li>
+
+<li><a href="//twitter.com/example" target="_blank" rel="noopener" title="Twitter" class="fab fa-twitter"></a></li>
+
+
+<li><a href="//pinterest.com/example" target="_blank" rel="noopener" title="Pinterest" class="fab fa-pinterest-p"></a></li>
+<li><a href="//telegram.me/example" target="_blank" rel="noopener" title="telegram" class="fab fa-telegram"></a></li>
+
+
+
+<li><a href="//researchgate.net/profile/example" target="_blank" rel="noopener" title="Research Gate"><i class="ai ai-researchgate"></i></a></li>
+<li><a href="//keybase.io/example" target="_blank" rel="noopener" title="keybase" class="fab fa-keybase"></a></li>
+<li><a href="//example.com/@example" target="_blank" rel="noopener" title="mastodon" class="fab fa-mastodon"></a></li>
+<li><a href="mailto:cen1024@163.com" target="_blank" title="Email" class="far fa-envelope"></a></li>
+
+      </ul>
+  
+  <p class="copyright">
+    
+      &copy; 2019
+      
+        陈sir 的流水帐
+      
+    . <br>
+    主题: <a href='https://themes.gohugo.io/hugo-future-imperfect-slim/' target='_blank' rel='noopener'>Hugo Future Imperfect Slim</a><br>移植自 <a href='https://html5up.net/future-imperfect' target='_blank' rel='noopener'>HTML5 UP</a> | 由 <a href='https://gohugo.io/' target='_blank' rel='noopener' title='0.58.0'>Hugo</a> 驱动
+  </p>
+</footer>
+<a id="back-to-top" href="#" class="fas fa-arrow-up fa-2x"></a>
+
+      
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js">
+</script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/html.min.js">
+  </script><script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/css.min.js">
+  </script><script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/js.min.js">
+  </script><script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/toml.min.js">
+  </script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/skel/3.0.1/skel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
+<script src=/js/util.js></script>
+<script src=/js/main.js></script>
+<script src=/js/add-on.js></script>
+
+
+
+
+
+    </div>
+  </body>
+</html>

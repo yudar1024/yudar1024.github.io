@@ -6,10 +6,20 @@
     <description>Recent content in Blog on 陈sir 的流水帐</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 23 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 25 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://yudar1024.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>spring security 与 keyclaok 集成，使用 oidc 登录</title>
+      <link>https://yudar1024.github.io/blog/spring-security-with-oidc/</link>
+      <pubDate>Wed, 25 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://yudar1024.github.io/blog/spring-security-with-oidc/</guid>
+      <description>核心代码 securityConfiguration.java 文件
+package com.mycompany.gateway.config; import com.mycompany.gateway.security.*; import org.springframework.context.annotation.Bean; import org.springframework.context.annotation.Import; import org.springframework.http.HttpMethod; import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity; import org.springframework.security.config.annotation.web.builders.HttpSecurity; import org.springframework.security.config.annotation.web.builders.WebSecurity; import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity; import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter; import com.mycompany.gateway.security.oauth2.AudienceValidator; import com.mycompany.gateway.security.SecurityUtils; import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator; import org.springframework.security.oauth2.core.OAuth2TokenValidator; import org.springframework.security.oauth2.jwt.*; import com.mycompany.gateway.security.oauth2.AuthorizationHeaderFilter; import com.mycompany.gateway.security.oauth2.AuthorizationHeaderUtil; import org.springframework.beans.factory.annotation.Value; import org.springframework.security.core.GrantedAuthority; import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper; import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority; import java.util.*; import org.springframework.security.web.csrf.CookieCsrfTokenRepository; import org.springframework.security.web.csrf.CsrfFilter; import com.mycompany.gateway.security.oauth2.JwtAuthorityExtractor; import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter; import org.springframework.web.filter.CorsFilter; import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport; @EnableWebSecurity @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true) @Import(SecurityProblemSupport.class) public class SecurityConfiguration extends WebSecurityConfigurerAdapter { private final CorsFilter corsFilter; // 这里的key，需要和application.</description>
+    </item>
     
     <item>
       <title>kubernetes service 介绍</title>
