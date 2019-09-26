@@ -1,6 +1,6 @@
 +++
 author = "陈 sir"
-categories = ["安全",]
+categories = ["安全"]
 tags = ["spring security","oauth2","oidc"]
 date = "2019-09-25"
 description = "oidc spring security"
@@ -252,6 +252,28 @@ public class OAuth2LoginAuthenticationFilter extends AbstractAuthenticationProce
 ```
 ## 4 刷新token
 当token 过期 resource server 会返回401，最简单的处理方法就是抛出 `OAuth2AuthorizationException`，这样会自动触发登录流程。但是我们也可以通过程序自动刷新token
+
+
+
+## 5. 使用 curl 命令 从 keycloak 获取 token
+前置条件，client 必须启用 direct access grant
+
+![image.png](https://upload-images.jianshu.io/upload_images/5120230-66ee56ab0306d906.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+---
+
+
+
+``` bash
+curl -X POST -u "<client_id>:<client_secret>" http://localhost:9000/auth/realms/<realm-name>/protocol/openid-connect/token -d "grant_type=password&username=<keycloak-username-default-use-admin>&password=<openstack>&scope=openid email microprofile-jwt offline_access phone"
+```
+
+---
+
+> 当 client type 为 public 和 bear token 的时候，是没有client secret的，此时 -u 参数只填写client id 即可。 例如 -u "web_app:"，冒号不能省略
+
+[参考文档 官方](https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc-auth-flows)
+[参考文档 curl 获取token](https://backstage.forgerock.com/knowledge/kb/article/a45882528)
 
 [参考文档 Spring boot + Spring Security 5 + OAuth2/OIDC Client - Basics](https://dev.to/shyamala_u/spring-boot--spring-security-5--oauth2oidc-client---basics-4ibo)
 [参考文档 Spring boot + Spring Security 5 + OAuth2/OIDC Client - Deep Dive](https://dev.to/shyamala_u/spring-boot--spring-security-5--oauth2oidc-client---deep-dive-261l)
