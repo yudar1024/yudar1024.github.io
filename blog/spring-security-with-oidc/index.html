@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-09-25T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-09-25T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="559">
+<meta itemprop="wordCount" content="606">
 
 
 
@@ -587,6 +587,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 <h2 id="4-刷新token">4 刷新token</h2>
 
 <p>当token 过期 resource server 会返回401，最简单的处理方法就是抛出 <code>OAuth2AuthorizationException</code>，这样会自动触发登录流程。但是我们也可以通过程序自动刷新token</p>
+
+<h2 id="5-使用-curl-命令-从-keycloak-获取-token">5. 使用 curl 命令 从 keycloak 获取 token</h2>
+
+<p>前置条件，client 必须启用 direct access grant</p>
+
+<p><img src="https://upload-images.jianshu.io/upload_images/5120230-66ee56ab0306d906.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></p>
+
+<hr />
+
+<pre><code class="language-bash">curl -X POST -u &quot;&lt;client_id&gt;:&lt;client_secret&gt;&quot; http://localhost:9000/auth/realms/&lt;realm-name&gt;/protocol/openid-connect/token -d &quot;grant_type=password&amp;username=&lt;keycloak-username-default-use-admin&gt;&amp;password=&lt;openstack&gt;&amp;scope=openid email microprofile-jwt offline_access phone&quot;
+</code></pre>
+
+<hr />
+
+<blockquote>
+<p>当 client type 为 public 和 bear token 的时候，是没有client secret的，此时 -u 参数只填写client id 即可。 例如 -u &ldquo;web_app:&ldquo;，冒号不能省略</p>
+</blockquote>
+
+<p><a href="https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc-auth-flows">参考文档 官方</a>
+<a href="https://backstage.forgerock.com/knowledge/kb/article/a45882528">参考文档 curl 获取token</a></p>
 
 <p><a href="https://dev.to/shyamala_u/spring-boot--spring-security-5--oauth2oidc-client---basics-4ibo">参考文档 Spring boot + Spring Security 5 + OAuth2/OIDC Client - Basics</a>
 <a href="https://dev.to/shyamala_u/spring-boot--spring-security-5--oauth2oidc-client---deep-dive-261l">参考文档 Spring boot + Spring Security 5 + OAuth2/OIDC Client - Deep Dive</a></p>
