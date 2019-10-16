@@ -17,7 +17,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://yudar1024.github.io/" />
 
-<meta property="og:updated_time" content="2019-09-25T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
+<meta property="og:updated_time" content="2019-10-16T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
 
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="陈sir 的流水帐"/>
@@ -240,6 +240,76 @@
   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
   <div class="title">
     
+        <h2><a href="/blog/keycloak-ssl-configuration/">Keycloak 配置SSL 实现HTTPS 访问</a></h2>
+    
+    
+        <p>Keycloak SSL Configuration</p>
+    
+</div>
+  <div class="meta">
+    <time class="published" datetime="2019-09-21 00:00:00 &#43;0000 UTC">
+      September 21, 2019
+    </time>
+    <span class="author">陈 sir</span>
+    
+      <p>1 分钟</p>
+    
+  </div>
+</header>
+
+  
+  <a href="/blog/keycloak-ssl-configuration/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+  
+  <pre><code class="language-bash">keytool -genkeypair -alias keycloak.me -keyalg RSA -keystore keycloak.jks -validity 10950
+</code></pre>
+
+<blockquote>
+<p>注意：CN必须是主机名，也可以是ip但是ip容易变，所以主机名或域名。后面访问的是时候通过在hosts 就文件映射域名到IP, 这里将CN 设置为keycloak.me, 注意alias参数不是设置CN的地方</p>
+  <footer>
+    <a href="/blog/keycloak-ssl-configuration/" class="button big">阅读全文</a>
+    <ul class="stats">
+  
+    
+    
+      <li class="categories">
+        <ul>
+          
+            
+            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/keycloak">Keycloak </a></li>
+          
+        </ul>
+      </li>
+    
+  
+  
+    
+    
+      <li class="tags">
+        <ul>
+          
+            
+            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/keycloak">Keycloak </a></li>
+          
+        </ul>
+      </li>
+    
+  
+</ul>
+
+  </footer>
+</article>
+
+        
+          <article class="post">
+  <header>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <div class="title">
+    
         <h2><a href="/blog/software-knowledge/">日常软件使用技巧</a></h2>
     
     
@@ -372,72 +442,6 @@
 </article>
 
         
-          <article class="post">
-  <header>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <div class="title">
-    
-        <h2><a href="/blog/deploy-glusterfs-heketi-out-of-k8s/">kubernetes 使用独立 glusterfs &#43; heketi集群</a></h2>
-    
-    
-        <p>deploy glusterfs and heketi out of kubernetes</p>
-    
-</div>
-  <div class="meta">
-    <time class="published" datetime="2019-09-10 00:00:00 &#43;0000 UTC">
-      September 10, 2019
-    </time>
-    <span class="author">陈 sir</span>
-    
-      <p>6 分钟</p>
-    
-  </div>
-</header>
-
-  
-  <a href="/blog/deploy-glusterfs-heketi-out-of-k8s/" class="image featured">
-    <img src="/img/main/title.png" alt="">
-  </a>
-
-
-  
-  <p><strong>主机列表</strong></p>
-  <footer>
-    <a href="/blog/deploy-glusterfs-heketi-out-of-k8s/" class="button big">阅读全文</a>
-    <ul class="stats">
-  
-    
-    
-      <li class="categories">
-        <ul>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/kubernetes">kubernetes</a></li>
-          
-        </ul>
-      </li>
-    
-  
-  
-    
-    
-      <li class="tags">
-        <ul>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/kubernetes">kubernetes</a></li>
-          
-        </ul>
-      </li>
-    
-  
-</ul>
-
-  </footer>
-</article>
-
-        
         
 <div class="pagination">
   
@@ -455,6 +459,21 @@
       <header>
         <h1>最新文章</h1>
       </header>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/deploy-rabbitmq-cluster/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/deploy-rabbitmq-cluster/">kubernetes 部署 rabbitmq 集群</a></h1>
+          <time class="published" datetime="">October 16, 2019</time>
+        </header>
+      </article>
       
       <article class="mini-post">
         <section>
@@ -531,21 +550,6 @@
         </header>
       </article>
       
-      <article class="mini-post">
-        <section>
-          
-  <a href="/blog/deploy-glusterfs-heketi-out-of-k8s/" class="image featured">
-    <img src="/img/main/title.png" alt="">
-  </a>
-
-
-        </section>
-        <header>
-          <h1><a href="/blog/deploy-glusterfs-heketi-out-of-k8s/">kubernetes 使用独立 glusterfs &#43; heketi集群</a></h1>
-          <time class="published" datetime="">September 10, 2019</time>
-        </header>
-      </article>
-      
       
         <a href="/blog/" class="button">查看更多</a>
       
@@ -565,7 +569,7 @@
           
           <li>
             
-              <a href="/categories/kubernetes/">kubernetes<span class="count">4</span></a>
+              <a href="/categories/kubernetes/">kubernetes<span class="count">5</span></a>
             
           
           <li>

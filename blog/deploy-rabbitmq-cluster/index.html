@@ -2,26 +2,34 @@
 <html lang="zh-cn">
   <head>
   <meta charset="utf-8">
-<title>kubernetes - 陈sir 的流水帐</title>
+<title>kubernetes 部署 rabbitmq 集群 - 陈sir 的流水帐</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
 
   <meta name="generator" content="Hugo 0.58.0" />
-  <meta itemprop="name" content="kubernetes">
-<meta itemprop="description" content="要有希望">
+  <meta itemprop="name" content="kubernetes 部署 rabbitmq 集群">
+<meta itemprop="description" content="deploy rabbitmq cluster in kubernetes">
 
 
-  <meta property="og:title" content="kubernetes" />
-<meta property="og:description" content="要有希望" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://yudar1024.github.io/tags/kubernetes/" />
+<meta itemprop="datePublished" content="2019-10-16T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-10-16T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="125">
 
-<meta property="og:updated_time" content="2019-10-16T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
+
+
+<meta itemprop="keywords" content="kubernetes," />
+
+  <meta property="og:title" content="kubernetes 部署 rabbitmq 集群" />
+<meta property="og:description" content="deploy rabbitmq cluster in kubernetes" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yudar1024.github.io/blog/deploy-rabbitmq-cluster/" />
+<meta property="article:published_time" content="2019-10-16T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-10-16T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
 
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="kubernetes"/>
-<meta name="twitter:description" content="要有希望"/>
+<meta name="twitter:title" content="kubernetes 部署 rabbitmq 集群"/>
+<meta name="twitter:description" content="deploy rabbitmq cluster in kubernetes"/>
 <meta name="twitter:site" content="@example"/>
 
   
@@ -54,7 +62,7 @@
       <a href="/">
         
           
-            标签
+            陈 sir 的流水帐
           
         
       </a>
@@ -136,37 +144,37 @@
 
   
     
-    <a href="//twitter.com/share?text=kubernetes&amp;url=https%3a%2f%2fyudar1024.github.io%2ftags%2fkubernetes%2f" target="_blank" rel="noopener" class="share-btn twitter">
+    <a href="//twitter.com/share?text=kubernetes%20%e9%83%a8%e7%bd%b2%20rabbitmq%20%e9%9b%86%e7%be%a4&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f" target="_blank" rel="noopener" class="share-btn twitter">
         <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
       </a>
   
 
   
-      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2ftags%2fkubernetes%2f" target="_blank" rel="noopener" class="share-btn facebook">
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f" target="_blank" rel="noopener" class="share-btn facebook">
         <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
         </a>
   
 
   
-    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2ftags%2fkubernetes%2f&amp;title=kubernetes" target="_blank" rel="noopener" class="share-btn reddit">
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f&amp;title=kubernetes%20%e9%83%a8%e7%bd%b2%20rabbitmq%20%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn reddit">
           <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
         </a>
   
 
   
-        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2ftags%2fkubernetes%2f&amp;title=kubernetes" target="_blank" rel="noopener" class="share-btn linkedin">
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f&amp;title=kubernetes%20%e9%83%a8%e7%bd%b2%20rabbitmq%20%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn linkedin">
             <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
           </a>
   
 
   
-        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2ftags%2fkubernetes%2f&amp;description=kubernetes" target="_blank" rel="noopener" class="share-btn pinterest">
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f&amp;description=kubernetes%20%e9%83%a8%e7%bd%b2%20rabbitmq%20%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn pinterest">
           <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
         </a>
   
 
   
-        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2ftags%2fkubernetes%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f" target="_blank" class="share-btn email" data-proofer-ignore>
           <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
         </a>
   
@@ -189,8 +197,6 @@
     <footer>
       <ul class="socnet-icons">
         
-    <li><a href="/tags/kubernetes/index.xml" type="application/rss+xml" target="_blank" title="RSS" class="fas fa-rss"></a></li>
-
 
         <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
 
@@ -239,10 +245,7 @@
 </section>
 
       <main id="site-main">
-        <h1>kubernetes</h1>
-        
-        
-            <article class="post">
+        <article class="post">
   <header>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
@@ -265,82 +268,159 @@
   </div>
 </header>
 
+  <section id="socnet-share">
+    
+
+
+
+
+  
+    
+    <a href="//twitter.com/share?text=kubernetes%20%e9%83%a8%e7%bd%b2%20rabbitmq%20%e9%9b%86%e7%be%a4&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f" target="_blank" rel="noopener" class="share-btn twitter">
+        <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f" target="_blank" rel="noopener" class="share-btn facebook">
+        <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
+        </a>
+  
+
+  
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f&amp;title=kubernetes%20%e9%83%a8%e7%bd%b2%20rabbitmq%20%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn reddit">
+          <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
+        </a>
+  
+
+  
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f&amp;title=kubernetes%20%e9%83%a8%e7%bd%b2%20rabbitmq%20%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn linkedin">
+            <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
+          </a>
+  
+
+  
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f&amp;description=kubernetes%20%e9%83%a8%e7%bd%b2%20rabbitmq%20%e9%9b%86%e7%be%a4" target="_blank" rel="noopener" class="share-btn pinterest">
+          <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fdeploy-rabbitmq-cluster%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+          <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
+        </a>
+  
+
+
+  </section>
   
   <a href="/blog/deploy-rabbitmq-cluster/" class="image featured">
     <img src="/img/main/title.png" alt="">
   </a>
 
 
-  
-  <p>rabbitmq的队列（queue）镜像，指master node 在接受到请求后，会同步到其他节点上，以此来保证高可用。在confirm模式下，具体过程如下</p>
-  <footer>
-    <a href="/blog/deploy-rabbitmq-cluster/" class="button big">阅读全文</a>
-    <ul class="stats">
-  
+  <div class="content">
     
-    
-      <li class="categories">
-        <ul>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/kubernetes">kubernetes</a></li>
-          
-        </ul>
-      </li>
-    
-  
-  
-    
-    
-      <li class="tags">
-        <ul>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/kubernetes">kubernetes</a></li>
-          
-        </ul>
-      </li>
-    
-  
+
+<h1 id="rabbitmq-集群基础知识">RABBITMQ 集群基础知识</h1>
+
+<h2 id="队列镜像">队列镜像</h2>
+
+<p>rabbitmq的队列（queue）镜像，指master node 在接受到请求后，会同步到其他节点上，以此来保证高可用。在confirm模式下，具体过程如下</p>
+
+<p>clientpublisher 发送消息&ndash;&gt; master node接到消息&ndash;&gt; master node 将消息持久化到磁盘 &ndash;&gt; 将消息异步发送给其他节点&ndash;&gt;master 将ack 返回给client publisher。</p>
+
+<blockquote>
+<p>需要理解的点，1 rabbitmq的消息接口是异步的。 publisher 发送给 master 之后，在没收到ack之前仍然可以继续发送消息，这中间没有阻塞。 2 master 在像其他节点同步消息的过程是阻塞性的，在这个工程中，队列不能读写。</p>
+</blockquote>
+
+<h2 id="当master节点挂掉之后-集群是如何处理的">当master节点挂掉之后，集群是如何处理的</h2>
+
+<ol>
+<li><p>运行时间最长的镜像被提升为主镜像，假设它最有可能与主镜像完全同步。如果没有与主服务器同步的镜像，仅存在于主服务器上的消息将丢失。因为原master上的消息都已经落盘，所以也不会完全丢失。</p></li>
+
+<li><p>mirror认为之前所有的消费者都被突然断开连接。它需要重发所有已发送到消费者但正在等待消费者确认的消息。这可能是客户端发出确认的消息，例如，如果消费者的确认消息在到达节点master之前网络上丢失（断网），或者在从master发送到到镜像主机时丢失。在这两种情况下，新主服务器别无选择，只能重新发送所有它没有看到确认的消息。（要求消费者对信息具有幂等性）</p></li>
+
+<li><p>当队列故障转移的时候，如果有消息被取消，publisher将会收到通知。</p></li>
+
+<li><p>消费者需要注意，作为重建队列的代价，消费者可能会重复收到之前消费过的消息。</p></li>
+
+<li><p>当选择的镜像成为主镜像时，在此期间发布到镜像队列的消息不会丢失。发布到镜像队列的消息会被路由到新的master 节点，然后同步到所有的mirror 节点。如果主服务器挂掉，消息将继续发送到镜像，并在镜像升级为master服务器完成后添加到队列中。</p></li>
+
+<li><p>发布者如果使用confirm模式，即使master 挂掉，消息仍然会被后面mirror 节点确认（提升为master），在发布者的角度，confirm模式发布的消息，发布到集群和发布到单节点，没什么不同。</p></li>
+
+<li><p>当一个镜像节点加入，或重新加入镜像队列是，之前的队列内容全部丢失。</p></li>
+
+<li><p>当所有slave都处在(与master)未同步状态时，并且ha-promote-on-shutdown policy设置为when-syned(默认)时，如果master因为主动的原因停掉，比如是通过rabbitmqctl stop命令停止或者优雅关闭OS，那么slave不会接管master，也就是说此时镜像队列不可用；但是如果master因为被动原因停掉，比如VM 或者OS crash了，那么slave会接管master。这个配置项隐含的价值取向是优先保证消息可靠不丢失，放弃可用性。如果ha-promote-on- shutdown policy设置为alway，那么不论master因为何种原因停止，slave都会接管master，优先保证可用性。</p></li>
+
+<li><p>镜像队列中最后一个停止的节点会是master，启动顺序必须是master先起，如果slave先起，它会有30秒的等待时间，等待master启动， 然后加入cluster。当所有节点因故(断电等)同时离线时，每个节点都认为自己不是最后一个停止的节点。要恢复镜像队列，可以尝试在30秒之内同时启 动所有节点。</p></li>
+
+<li><p>对于镜像队列，客户端basic.publish操作会同步到所有节点；而其他操作则是通过master中转，再由master将操作作用于salve。 比如一个basic.get操作，假如客户端与slave建立了TCP连接，首先是slave将basic.get请求发送至master，由 master备好数据，返回至slave，投递给消费者。</p></li>
+
+<li><p>由10可知，当slave宕掉时，除了与slave相连的客户端连接全部断开之外，没有其他影响。当master宕掉时，会有以下连锁反应：1)与 master相连的客户端连接全部断开。2)选举最老的slave为master。若此时所有slave处于未同步状态，则未同步部分消息丢失。3)新的 master节点requeue所有unack消息，因为这个新节点无法区分这些unack消息是否已经到达客户端，亦或是ack消息丢失在到老 master的通路上，亦或是丢在老master组播ack消息到所有slave的通路上。所以处于消息可靠性的考虑，requeue所有unack的消 息。此时客户端可能受到重复消息。4)如果客户端连着slave，并且basic.consume消息时指定了x-cancel-on-ha- failover参数，那么客户端会收到一个Consumer Cancellation Notification通知，Java SDK中会回调Consumer接口的handleCancel()方法，故需覆盖此方法。如果不指定x-cancel-on-ha-failover参 数，那么消费者就无法感知master宕机，会一直等待下去。</p></li>
+</ol>
+
+<h2 id="流控制">流控制</h2>
+
+<p>rabbitmq 通过凭证算法来控制消息发送的频率，只有当发布者从所有的mirror 节点获取凭证(credit),后才能发布消息。如果mirror 节点故障无法发布凭证，发布者将无法发布消息，直到故障修复，或者集群其他检点认为故障节点已经脱离集群。</p>
+
+<h2 id="数据保障">数据保障</h2>
+
+<p>ha-promote-on-failure 策略（policy key），如果设置为<code>when-synced</code> 那么数据与master 节点不同步的节点，讲无法被选择为新的master。 但是这样整个集群的高可用将会降低。取决于一致性与集群可用性的取舍。默认值为<code>always</code></p>
+
+<h2 id="故障恢复">故障恢复</h2>
+
+<p>下面的镜像队列恢复才是本文重点：</p>
+
+<ul>
+<li>前提：两个节点(A和B)组成一个镜像队列。</li>
+<li>场景1：A先停，B后停。</li>
 </ul>
 
-  </footer>
-</article>
+<p>该场景下B是master，只要先启动B，再启动A即可。或者先启动A，再在30秒之内启动B即可恢复镜像队列。</p>
 
-        
-            <article class="post">
-  <header>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <div class="title">
-    
-        <h2><a href="/blog/service-introduction/">kubernetes service 介绍</a></h2>
-    
-    
-        <p>service introduction</p>
-    
-</div>
-  <div class="meta">
-    <time class="published" datetime="2019-09-23 00:00:00 &#43;0000 UTC">
-      September 23, 2019
-    </time>
-    <span class="author">陈 sir</span>
-    
-      <p>3 分钟</p>
-    
+<ul>
+<li>场景2: A, B同时停。</li>
+</ul>
+
+<p>该场景可能是由掉电等原因造成，只需在30秒之内连续启动A和B即可恢复镜像队列。</p>
+
+<ul>
+<li>场景3：A先停，B后停，且A无法恢复。</li>
+</ul>
+
+<p>该场景是场景1的加强版，因为B是master，所以等B起来后，在B节点上调用rabbitmqctl forget_cluster_node A，解除与A的cluster关系，再将新的slave节点加入B即可重新恢复镜像队列。</p>
+
+<ul>
+<li>场景4：A先停，B后停，且B无法恢复。</li>
+</ul>
+
+<p>该场景是场景3的加强版，比较难处理，早在3.1.x时代之前貌似都没什么好的解决方法，可能是我不知道，但是现在已经有解决方法了，在3.4.2 版本亲测有效。因为B是master，所以直接启动A是不行的，当A无法启动时，也就没办法在A节点上调用rabbitmqctl forget_cluster_node B了。新版本中，forget_cluster_node支 持–offline参数，offline参数允许rabbitmqctl在离线节点上执行forget_cluster_node命令，迫使 RabbitMQ在未启动的slave节点中选择一个作为master。当在A节点执行rabbitmqctl forget_cluster_node –offline B时，RabbitMQ会mock一个节点代表A，执行forget_cluster_node命令将B剔出cluster，然后A就能正常启动了。最后 将新的slave节点加入A即可重新恢复镜像队列。</p>
+
+<ul>
+<li>场景5: A先停，B后停，且A、B均无法恢复，但是能得到A或B的磁盘文件。</li>
+</ul>
+
+<p>该场景是场景4的加强版，更加难处理。将A或B的数据库文件(默认在$RABBIT_HOME/var/lib目录中)拷贝至新节点C的目录下，再 将C的hostname改成A或B的hostname。如果拷过来的是A节点磁盘文件，按场景4处理方式；如果拷过来的是B节点磁盘文件，按场景3处理方 式。最后将新的slave节点加入C即可重新恢复镜像队列。</p>
+
+<ul>
+<li>场景6：A先停，B后停，且A、B均无法恢复，且无法得到A或B的磁盘文件。</li>
+</ul>
+
+<p>洗洗睡吧，该场景下已无法恢复A、B队列中的内容了。</p>
+
+<h1 id="rabbitmq-服务发现机制">rabbitmq 服务发现机制</h1>
+
+<p>rabbitmq 在K8S 集群中 通过<code>rabbitmq_peer_discovery_k8s</code> plugin 与apiserver 进行交付，获取各个服务的URL,RABBITMQ 在K8S 集群中必须是用 statefulset 和 headless service 进行匹配。</p>
+
+<p><a href="http://next.rabbitmq.com/cluster-formation.html#peer-discovery-k8s">一些相关的配置文件</a></p>
+
+<p>官方 配置案例</p>
+
+<p><a href="https://github.com/rabbitmq/rabbitmq-peer-discovery-k8s/tree/master/examples/k8s_statefulsets">传送门</a></p>
+
   </div>
-</header>
-
-  
-  <a href="/blog/service-introduction/" class="image featured">
-    <img src="/img/main/title.png" alt="">
-  </a>
-
-
-  
-  <p>是发现后端pod服务；</p>
   <footer>
-    <a href="/blog/service-introduction/" class="button big">阅读全文</a>
     <ul class="stats">
   
     
@@ -373,82 +453,30 @@
   </footer>
 </article>
 
-        
-            <article class="post">
-  <header>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-  <div class="title">
-    
-        <h2><a href="/blog/using-heketi-to-maintain-glusterfs/">使用 heketi 维护 glusterfs</a></h2>
-    
-    
-        <p>using heketi to maintain glusterfs </p>
-    
-</div>
-  <div class="meta">
-    <time class="published" datetime="2019-09-11 00:00:00 &#43;0000 UTC">
-      September 11, 2019
-    </time>
-    <span class="author">陈 sir</span>
-    
-      <p>2 分钟</p>
-    
-  </div>
-</header>
+    <div id="gitalk-container">
+        <script>
+            var gitalk = new Gitalk({
+  clientID: "a83bc47e22d46426006c",
+  clientSecret: '4df05cf9cb02897883f87f3d1c8552ed88d47a2a',
+  repo: 'yudar1024.github.io',
+  owner: 'yudar1024',
+  admin: ['yudar1024'],
+  id: location.pathname,
+  distractionFreeMode: true  
+})
 
-  
-  <a href="/blog/using-heketi-to-maintain-glusterfs/" class="image featured">
-    <img src="/img/main/title.png" alt="">
-  </a>
+gitalk.render('gitalk-container')
+        </script>
+    </div>
 
 
-  
-  <p>glusterfs 最日常的运维工作就是添加磁盘，添加节点。</p>
-  <footer>
-    <a href="/blog/using-heketi-to-maintain-glusterfs/" class="button big">阅读全文</a>
-    <ul class="stats">
-  
-    
-    
-      <li class="categories">
-        <ul>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/kubernetes">kubernetes</a></li>
-          
-        </ul>
-      </li>
-    
-  
-  
-    
-    
-      <li class="tags">
-        <ul>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/kubernetes">kubernetes</a></li>
-          
-        </ul>
-      </li>
-    
-  
-</ul>
-
-  </footer>
-</article>
-
-        
-        
 <div class="pagination">
   
-    <a href="#" class="disabled button big previous"><i class="fas fa-angle-left"></i></a>
+    <a href="/blog/spring-security-with-oidc/" class="button big previous"><i class="fas fa-angle-left"></i> spring security 与 keyclaok 集成，使用 oidc 登录</a>
   
-  
-    <a href="/tags/kubernetes/page/2/" class="button big next"><i class="fas fa-angle-right"></i></a>
   
 </div>
+
 
       </main>
       <section id="site-sidebar">
@@ -606,8 +634,6 @@
   
       <ul class="socnet-icons">
         
-    <li><a href="/tags/kubernetes/index.xml" type="application/rss+xml" target="_blank" title="RSS" class="fas fa-rss"></a></li>
-
 
         <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
 

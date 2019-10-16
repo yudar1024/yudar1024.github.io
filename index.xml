@@ -6,10 +6,32 @@
     <description>Recent content on 陈sir 的流水帐</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 25 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 16 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://yudar1024.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>kubernetes 部署 rabbitmq 集群</title>
+      <link>https://yudar1024.github.io/blog/deploy-rabbitmq-cluster/</link>
+      <pubDate>Wed, 16 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://yudar1024.github.io/blog/deploy-rabbitmq-cluster/</guid>
+      <description>RABBITMQ 集群基础知识 队列镜像 rabbitmq的队列（queue）镜像，指master node 在接受到请求后，会同步到其他节点上，以此来保证高可用。在confirm模式下，具体过程如下
+clientpublisher 发送消息&amp;ndash;&amp;gt; master node接到消息&amp;ndash;&amp;gt; master node 将消息持久化到磁盘 &amp;ndash;&amp;gt; 将消息异步发送给其他节点&amp;ndash;&amp;gt;master 将ack 返回给client publisher。
+ 需要理解的点，1 rabbitmq的消息接口是异步的。 publisher 发送给 master 之后，在没收到ack之前仍然可以继续发送消息，这中间没有阻塞。 2 master 在像其他节点同步消息的过程是阻塞性的，在这个工程中，队列不能读写。
+ 当master节点挂掉之后，集群是如何处理的  运行时间最长的镜像被提升为主镜像，假设它最有可能与主镜像完全同步。如果没有与主服务器同步的镜像，仅存在于主服务器上的消息将丢失。因为原master上的消息都已经落盘，所以也不会完全丢失。
+ mirror认为之前所有的消费者都被突然断开连接。它需要重发所有已发送到消费者但正在等待消费者确认的消息。这可能是客户端发出确认的消息，例如，如果消费者的确认消息在到达节点master之前网络上丢失（断网），或者在从master发送到到镜像主机时丢失。在这两种情况下，新主服务器别无选择，只能重新发送所有它没有看到确认的消息。（要求消费者对信息具有幂等性）
+ 当队列故障转移的时候，如果有消息被取消，publisher将会收到通知。
+ 消费者需要注意，作为重建队列的代价，消费者可能会重复收到之前消费过的消息。
+ 当选择的镜像成为主镜像时，在此期间发布到镜像队列的消息不会丢失。发布到镜像队列的消息会被路由到新的master 节点，然后同步到所有的mirror 节点。如果主服务器挂掉，消息将继续发送到镜像，并在镜像升级为master服务器完成后添加到队列中。
+ 发布者如果使用confirm模式，即使master 挂掉，消息仍然会被后面mirror 节点确认（提升为master），在发布者的角度，confirm模式发布的消息，发布到集群和发布到单节点，没什么不同。
+ 当一个镜像节点加入，或重新加入镜像队列是，之前的队列内容全部丢失。
+ 当所有slave都处在(与master)未同步状态时，并且ha-promote-on-shutdown policy设置为when-syned(默认)时，如果master因为主动的原因停掉，比如是通过rabbitmqctl stop命令停止或者优雅关闭OS，那么slave不会接管master，也就是说此时镜像队列不可用；但是如果master因为被动原因停掉，比如VM 或者OS crash了，那么slave会接管master。这个配置项隐含的价值取向是优先保证消息可靠不丢失，放弃可用性。如果ha-promote-on- shutdown policy设置为alway，那么不论master因为何种原因停止，slave都会接管master，优先保证可用性。
+ 镜像队列中最后一个停止的节点会是master，启动顺序必须是master先起，如果slave先起，它会有30秒的等待时间，等待master启动， 然后加入cluster。当所有节点因故(断电等)同时离线时，每个节点都认为自己不是最后一个停止的节点。要恢复镜像队列，可以尝试在30秒之内同时启 动所有节点。
+ 对于镜像队列，客户端basic.publish操作会同步到所有节点；而其他操作则是通过master中转，再由master将操作作用于salve。 比如一个basic.get操作，假如客户端与slave建立了TCP连接，首先是slave将basic.get请求发送至master，由 master备好数据，返回至slave，投递给消费者。
+ 由10可知，当slave宕掉时，除了与slave相连的客户端连接全部断开之外，没有其他影响。当master宕掉时，会有以下连锁反应：1)与 master相连的客户端连接全部断开。2)选举最老的slave为master。若此时所有slave处于未同步状态，则未同步部分消息丢失。3)新的 master节点requeue所有unack消息，因为这个新节点无法区分这些unack消息是否已经到达客户端，亦或是ack消息丢失在到老 master的通路上，亦或是丢在老master组播ack消息到所有slave的通路上。所以处于消息可靠性的考虑，requeue所有unack的消 息。此时客户端可能受到重复消息。4)如果客户端连着slave，并且basic.</description>
+    </item>
     
     <item>
       <title>spring security 与 keyclaok 集成，使用 oidc 登录</title>

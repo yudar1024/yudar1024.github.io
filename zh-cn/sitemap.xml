@@ -4,7 +4,7 @@
   
   <url>
     <loc>https://yudar1024.github.io/blog/</loc>
-    <lastmod>2019-09-25T00:00:00+00:00</lastmod>
+    <lastmod>2019-10-16T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -19,7 +19,7 @@
   
   <url>
     <loc>https://yudar1024.github.io/categories/</loc>
-    <lastmod>2019-09-25T00:00:00+00:00</lastmod>
+    <lastmod>2019-10-16T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -29,6 +29,51 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="https://yudar1024.github.io/categories/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://yudar1024.github.io/categories/kubernetes/</loc>
+    <lastmod>2019-10-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yudar1024.github.io/tags/kubernetes/</loc>
+    <lastmod>2019-10-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yudar1024.github.io/blog/deploy-rabbitmq-cluster/</loc>
+    <lastmod>2019-10-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://yudar1024.github.io/tags/</loc>
+    <lastmod>2019-10-16T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://yudar1024.github.io/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://yudar1024.github.io/tags/"
+                />
+  </url>
+  
+  <url>
+    <loc>https://yudar1024.github.io/</loc>
+    <lastmod>2019-10-16T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://yudar1024.github.io/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://yudar1024.github.io/"
                 />
   </url>
   
@@ -53,48 +98,8 @@
   </url>
   
   <url>
-    <loc>https://yudar1024.github.io/tags/</loc>
-    <lastmod>2019-09-25T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://yudar1024.github.io/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://yudar1024.github.io/tags/"
-                />
-  </url>
-  
-  <url>
     <loc>https://yudar1024.github.io/categories/%E5%AE%89%E5%85%A8/</loc>
     <lastmod>2019-09-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yudar1024.github.io/</loc>
-    <lastmod>2019-09-25T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://yudar1024.github.io/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://yudar1024.github.io/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://yudar1024.github.io/categories/kubernetes/</loc>
-    <lastmod>2019-09-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://yudar1024.github.io/tags/kubernetes/</loc>
-    <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
