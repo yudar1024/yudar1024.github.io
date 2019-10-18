@@ -15,13 +15,75 @@ type = "post"
 
 
 # RABBITMQ 集群基础知识
-## 队列镜像
+## 基础概念
+
+- **Producer**: 消息发送者
+
+- RabbitMQ
+
+  :
+
+  - Vhost: 相当于分组，每个vhost下数据是隔离的
+  - Exchange: 路由器，接收消息，本根据RoutingKey分发消息
+    - headers：消息头类型 路由器，内部应用
+    - direct：精准匹配类型 路由器
+    - topic：主题匹配类型 路由器，支持正则 模糊匹配
+    - fanout：广播类型 路由器，RoutingKey无效
+  - RoutingKey: 路由规则
+  - Queue: 队列，用于存储消息（消息的目的地）
+
+- **Consumer**: 消息消费者
+
+## 持久化
+
+RabbitMQ持久化分为Exchange、Queue、Message
+
+- Exchange 和 Queue 持久化 指持久化Exchange、Queue 元数据，持久化的是自身，服务宕机，Exchange 和 Queue 自身就没有了
+- Message 持久化 顾名思义 把每一条消息体持久化，服务宕机，消息不丢失
+
+
+
+## 镜像队列
 
 rabbitmq的队列（queue）镜像，指master node 在接受到请求后，会同步到其他节点上，以此来保证高可用。在confirm模式下，具体过程如下
 
 clientpublisher 发送消息--> master node接到消息--> master node 将消息持久化到磁盘 --> 将消息异步发送给其他节点-->master 将ack 返回给client publisher。
 
 > 需要理解的点，1 rabbitmq的消息接口是异步的。 publisher 发送给 master 之后，在没收到ack之前仍然可以继续发送消息，这中间没有阻塞。 2 master 在像其他节点同步消息的过程是阻塞性的，在这个工程中，队列不能读写。
+
+### 镜像队列设置方法
+
+镜像队列的配置通过添加policy完成，policy添加的命令为：
+
+``` shell
+rabbitmqctl set_policy [-p Vhost] Name Pattern Definition [Priority]
+
+-p Vhost： 可选参数，针对指定vhost下的queue进行设置
+Name: policy的名称
+Pattern: queue的匹配模式(正则表达式)
+Definition：镜像定义，包括三个部分ha-mode, ha-params, ha-sync-mode
+	ha-mode:指明镜像队列的模式，有效值为 all/exactly/nodes
+		all：表示在集群中所有的节点上进行镜像
+		exactly：表示在指定个数的节点上进行镜像，节点的个数由ha-params指定
+		nodes：表示在指定的节点上进行镜像，节点名称通过ha-params指定
+	ha-params：ha-mode模式需要用到的参数
+	ha-sync-mode：进行队列中消息的同步方式，有效值为automatic和manual
+priority：可选参数，policy的优先级
+————————————————
+版权声明：本文为CSDN博主「朱小厮」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/u013256816/article/details/71097186
+```
+
+例如已mirror 开头的对里，都进行镜像
+
+``` shell
+rabbitmqctl set_policy --priority 0 --apply-to queues mirror_queue "^queue_" '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
+
+```
+
+
+
+
 
 ## 当master节点挂掉之后，集群是如何处理的
 
@@ -77,11 +139,226 @@ ha-promote-on-failure 策略（policy key），如果设置为`when-synced` 那�
 
 洗洗睡吧，该场景下已无法恢复A、B队列中的内容了。
 
+[镜像队列](https://blog.csdn.net/u013256816/article/details/71097186)
 
 
-# rabbitmq 服务发现机制
+
+# rabbitmq 部署
+
+## 服务发现
 
 rabbitmq 在K8S 集群中 通过`rabbitmq_peer_discovery_k8s` plugin 与apiserver 进行交付，获取各个服务的URL,RABBITMQ 在K8S 集群中必须是用 statefulset 和 headless service 进行匹配。
+
+
+
+部署rabbitmq 到K8S 集群中
+
+创建 namespace 用于测试
+
+``` shell
+kubectl create ns test-rabbitmq
+```
+
+创建用于rbac的serviceaccount 权限文件
+
+``` yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rabbitmq
+  namespace: test-rabbitmq
+# Required from EKS 1.13
+# https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+automountServiceAccountToken: true
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: endpoint-reader
+  namespace: test-rabbitmq
+rules:
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: endpoint-reader
+  namespace: test-rabbitmq
+subjects:
+- kind: ServiceAccount
+  name: rabbitmq
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: endpoint-reader
+```
+
+statefulsets.yaml 部署文件
+
+``` yaml
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: test-rabbitmq
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    type: LoadBalancer
+spec:
+  type: NodePort
+  ports:
+   - name: http
+     protocol: TCP
+     port: 15672
+     targetPort: 15672
+     nodePort: 31672
+   - name: amqp
+     protocol: TCP
+     port: 5672
+     targetPort: 5672
+     nodePort: 30672
+  selector:
+    app: rabbitmq
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+  namespace: test-rabbitmq
+data:
+  enabled_plugins: |
+      [rabbitmq_management,rabbitmq_peer_discovery_k8s].
+  rabbitmq.conf: |
+      ## Cluster formation. See https://www.rabbitmq.com/cluster-formation.html to learn more.
+      cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
+      cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+      ## Should RabbitMQ node name be computed from the pod's hostname or IP address?
+      ## IP addresses are not stable, so using [stable] hostnames is recommended when possible.
+      ## Set to "hostname" to use pod hostnames.
+      ## When this value is changed, so should the variable used to set the RABBITMQ_NODENAME
+      ## environment variable.
+      cluster_formation.k8s.address_type = hostname
+      ## How often should node cleanup checks run?
+      cluster_formation.node_cleanup.interval = 30
+      ## Set to false if automatic removal of unknown/absent nodes
+      ## is desired. This can be dangerous, see
+      ##  * https://www.rabbitmq.com/cluster-formation.html#node-health-checks-and-cleanup
+      ##  * https://groups.google.com/forum/#!msg/rabbitmq-users/wuOfzEywHXo/k8z_HWIkBgAJ
+      cluster_formation.node_cleanup.only_log_warning = true
+      cluster_partition_handling = autoheal
+      ## See https://www.rabbitmq.com/ha.html#master-migration-data-locality
+      queue_master_locator=min-masters
+      ## This is just an example.
+      ## This enables remote access for the default user with well known credentials.
+      ## Consider deleting the default user and creating a separate user with a set of generated
+      ## credentials instead.
+      ## Learn more at https://www.rabbitmq.com/access-control.html#loopback-users
+      loopback_users.guest = false
+---
+apiVersion: apps/v1
+# See the Prerequisites section of https://www.rabbitmq.com/cluster-formation.html#peer-discovery-k8s.
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  namespace: test-rabbitmq
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq 
+  serviceName: rabbitmq
+  # Three nodes is the recommended minimum. Some features may require a majority of nodes
+  # to be available.
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      serviceAccountName: rabbitmq
+      terminationGracePeriodSeconds: 10
+      nodeSelector:
+        # Use Linux nodes in a mixed OS kubernetes cluster.
+        # Learn more at https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#kubernetes-io-os
+        kubernetes.io/os: linux
+      containers:
+      - name: rabbitmq-k8s
+        image: rabbitmq:3.8
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/rabbitmq
+        # Learn more about what ports various protocols use
+        # at https://www.rabbitmq.com/networking.html#ports
+        ports:
+          - name: http
+            protocol: TCP
+            containerPort: 15672
+          - name: amqp
+            protocol: TCP
+            containerPort: 5672
+        livenessProbe:
+          exec:
+            # This is just an example. There is no "one true health check" but rather
+            # several rabbitmq-diagnostics commands that can be combined to form increasingly comprehensive
+            # and intrusive health checks.
+            # Learn more at https://www.rabbitmq.com/monitoring.html#health-checks.
+            #
+            # Stage 2 check:
+            command: ["rabbitmq-diagnostics", "status"]
+          initialDelaySeconds: 60
+          # See https://www.rabbitmq.com/monitoring.html for monitoring frequency recommendations.
+          periodSeconds: 60
+          timeoutSeconds: 15
+        readinessProbe:
+          exec:
+            # This is just an example. There is no "one true health check" but rather
+            # several rabbitmq-diagnostics commands that can be combined to form increasingly comprehensive
+            # and intrusive health checks.
+            # Learn more at https://www.rabbitmq.com/monitoring.html#health-checks.
+            #
+            # Stage 2 check:
+            command: ["rabbitmq-diagnostics", "status"]
+            # To use a stage 4 check:
+            # command: ["rabbitmq-diagnostics", "check_port_connectivity"]
+          initialDelaySeconds: 20
+          periodSeconds: 60
+          timeoutSeconds: 10
+        imagePullPolicy: Always
+        env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: MY_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: RABBITMQ_USE_LONGNAME
+            value: "true"
+          # See a note on cluster_formation.k8s.address_type in the config file section
+          - name: K8S_SERVICE_NAME
+            value: rabbitmq
+          - name: RABBITMQ_NODENAME
+            value: rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local
+          - name: K8S_HOSTNAME_SUFFIX
+            value: .$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local
+          - name: RABBITMQ_ERLANG_COOKIE
+            value: "mycookie"
+      volumes:
+        - name: config-volume
+          configMap:
+            name: rabbitmq-config
+            items:
+            - key: rabbitmq.conf
+              path: rabbitmq.conf
+            - key: enabled_plugins
+              path: enabled_plugins
+```
+
+
 
 [一些相关的配置文件](http://next.rabbitmq.com/cluster-formation.html#peer-discovery-k8s)
 
