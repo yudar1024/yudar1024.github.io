@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+  <meta charset="utf-8">
+<title>kafka 概念介绍 - 陈sir 的流水帐</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+  <meta name="generator" content="Hugo 0.58.0" />
+  <meta itemprop="name" content="kafka 概念介绍">
+<meta itemprop="description" content="kafka 基础概念 基础概念  Producer: 消息发送者 broker： kafka节点 consumer: 消费者 topic： 主题，一组消息的集合，分布在多个分区里 partition：分区， 一个分区只能属于一个主题。在存储曾铭，分区可以看做一个可追加log日志文件，每个消息在分区中表现为一条日志，而消息的位置，通过offset 来记录，offset 是消息在分区分区中的唯一标示，offset保证消息的顺序性，注意，offset 不跨分区，在不同的分区中，offset 可能相同。 replica：副本，对分区的冗余，会尽量分布在不同的节点。一个分区会有leader 和 follower 两种角色的副本。 AR（assignded-replica）：分区中的所有副本统称为AR ISR (in-sync replica)：与 leader 副本保持一定程度同步的副本成为 ISR， ISR 是AR 的子集。 OSR (out-of-sync replica)：与leader 同步滞后达到一定程度的副本，这个一定程度可以通过参数进行设置。AR=ISR&#43;OSR HW(high watermark 高水位)：指一个特殊的OFFSET，消费者，只能获取HW 这个offset 之前的消息，即便HW 之后有其他消息，对消费者而言也是不可见的。（与ISR 强相关） LSO(logstartoffset)：消息开始的初始offset，值为0 LEO(logendoffset)：当前分区中，下一条待写入消息的offset。  offset消息的发送过程 producer-&gt; 拦截器（非必须） -&gt; 序列化器 -&gt; 分区器- broker
+producer-flow消息投递方式 P2P , PUB/SUB kafka 通过消费者组和消费者来适配两种模式
+如果所有的消费者头隶属于同一个消费者组，那么消息只会投递给其中一个消费者，相当于P2P模式
+如果消费者隶属于不同的消费者组，那么消息会发送给所有的消费者组。适配PUB/SUB模式
+消费位移（offset） 指消费者在kafka中的消费位置，注意这个角度跟消息的offset 不是一个意思。消息的offset 是指消息在kafka中的偏移量，而消费位移，是指消费者在分区中将消息消费到了哪一条。消费者在消费完消息之后需要提交消费位移。注意提交的消费位移的值，当前消费过的最后一条消息的offset&#43;1,而不是当前消费了的消息的offset">
+
+
+
+<meta itemprop="wordCount" content="80">
+
+
+
+<meta itemprop="keywords" content="kafka," />
+
+  <meta property="og:title" content="kafka 概念介绍" />
+<meta property="og:description" content="kafka 基础概念 基础概念  Producer: 消息发送者 broker： kafka节点 consumer: 消费者 topic： 主题，一组消息的集合，分布在多个分区里 partition：分区， 一个分区只能属于一个主题。在存储曾铭，分区可以看做一个可追加log日志文件，每个消息在分区中表现为一条日志，而消息的位置，通过offset 来记录，offset 是消息在分区分区中的唯一标示，offset保证消息的顺序性，注意，offset 不跨分区，在不同的分区中，offset 可能相同。 replica：副本，对分区的冗余，会尽量分布在不同的节点。一个分区会有leader 和 follower 两种角色的副本。 AR（assignded-replica）：分区中的所有副本统称为AR ISR (in-sync replica)：与 leader 副本保持一定程度同步的副本成为 ISR， ISR 是AR 的子集。 OSR (out-of-sync replica)：与leader 同步滞后达到一定程度的副本，这个一定程度可以通过参数进行设置。AR=ISR&#43;OSR HW(high watermark 高水位)：指一个特殊的OFFSET，消费者，只能获取HW 这个offset 之前的消息，即便HW 之后有其他消息，对消费者而言也是不可见的。（与ISR 强相关） LSO(logstartoffset)：消息开始的初始offset，值为0 LEO(logendoffset)：当前分区中，下一条待写入消息的offset。  offset消息的发送过程 producer-&gt; 拦截器（非必须） -&gt; 序列化器 -&gt; 分区器- broker
+producer-flow消息投递方式 P2P , PUB/SUB kafka 通过消费者组和消费者来适配两种模式
+如果所有的消费者头隶属于同一个消费者组，那么消息只会投递给其中一个消费者，相当于P2P模式
+如果消费者隶属于不同的消费者组，那么消息会发送给所有的消费者组。适配PUB/SUB模式
+消费位移（offset） 指消费者在kafka中的消费位置，注意这个角度跟消息的offset 不是一个意思。消息的offset 是指消息在kafka中的偏移量，而消费位移，是指消费者在分区中将消息消费到了哪一条。消费者在消费完消息之后需要提交消费位移。注意提交的消费位移的值，当前消费过的最后一条消息的offset&#43;1,而不是当前消费了的消息的offset" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yudar1024.github.io/blog/kafka-introduce/" />
+<meta property="og:site_name" content="陈sir 的流水帐" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="kafka 概念介绍"/>
+<meta name="twitter:description" content="kafka 基础概念 基础概念  Producer: 消息发送者 broker： kafka节点 consumer: 消费者 topic： 主题，一组消息的集合，分布在多个分区里 partition：分区， 一个分区只能属于一个主题。在存储曾铭，分区可以看做一个可追加log日志文件，每个消息在分区中表现为一条日志，而消息的位置，通过offset 来记录，offset 是消息在分区分区中的唯一标示，offset保证消息的顺序性，注意，offset 不跨分区，在不同的分区中，offset 可能相同。 replica：副本，对分区的冗余，会尽量分布在不同的节点。一个分区会有leader 和 follower 两种角色的副本。 AR（assignded-replica）：分区中的所有副本统称为AR ISR (in-sync replica)：与 leader 副本保持一定程度同步的副本成为 ISR， ISR 是AR 的子集。 OSR (out-of-sync replica)：与leader 同步滞后达到一定程度的副本，这个一定程度可以通过参数进行设置。AR=ISR&#43;OSR HW(high watermark 高水位)：指一个特殊的OFFSET，消费者，只能获取HW 这个offset 之前的消息，即便HW 之后有其他消息，对消费者而言也是不可见的。（与ISR 强相关） LSO(logstartoffset)：消息开始的初始offset，值为0 LEO(logendoffset)：当前分区中，下一条待写入消息的offset。  offset消息的发送过程 producer-&gt; 拦截器（非必须） -&gt; 序列化器 -&gt; 分区器- broker
+producer-flow消息投递方式 P2P , PUB/SUB kafka 通过消费者组和消费者来适配两种模式
+如果所有的消费者头隶属于同一个消费者组，那么消息只会投递给其中一个消费者，相当于P2P模式
+如果消费者隶属于不同的消费者组，那么消息会发送给所有的消费者组。适配PUB/SUB模式
+消费位移（offset） 指消费者在kafka中的消费位置，注意这个角度跟消息的offset 不是一个意思。消息的offset 是指消息在kafka中的偏移量，而消费位移，是指消费者在分区中将消息消费到了哪一条。消费者在消费完消息之后需要提交消费位移。注意提交的消费位移的值，当前消费过的最后一条消息的offset&#43;1,而不是当前消费了的消息的offset"/>
+<meta name="twitter:site" content="@example"/>
+
+  
+
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/github.min.css">
+  
+    
+      <link rel="stylesheet" href="/css/normalize.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,800,900|Source+Sans+Pro:400,700">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" integrity="sha384-i1LQnF23gykqWXg6jxC2ZbCbUMxyw5gLZY6UiUS98LYV5unm8GWmfkIS6jqJfb4E" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" />
+      
+      
+      <link rel="stylesheet" href="/css/main.min.df53c1edadafb8a1aaadcf6624a13b50f5d7bc72fd7e046927c32c5ea541e244.css" integrity="sha256-31PB7a2vuKGqrc9mJKE7UPXXvHL9fgRpJ8MsXqVB4kQ=">
+      <link rel="stylesheet" href="/css/add-on.css">
+    
+  
+  
+  
+  
+</head>
+
+  <body>
+    
+<header id="site-header">
+  <nav id="site-nav">
+    <h1 class="nav-title">
+      <a href="/">
+        
+          
+            陈 sir 的流水帐
+          
+        
+      </a>
+    </h1>
+    <menu id="site-nav-menu" class="flyout-menu">
+      
+        
+          
+          
+            <a href="/" class="link"><i class='fa fa-home'></i> 主页</a>
+          
+        
+      
+        
+          
+          
+            <a href="/about/" class="link"><i class='far fa-id-card'></i> 关于我</a>
+          
+        
+      
+        
+          
+          
+            <a href="/blog/" class="link"><i class='far fa-newspaper'></i> 日志</a>
+          
+        
+      
+        
+          
+          
+            <a href="/categories/" class="link"><i class='fas fa-sitemap'></i> 类别</a>
+          
+        
+      
+        
+          
+          
+            <a href="/tags/" class="link"><i class='fas fa-sitemap'></i> 标签</a>
+          
+        
+      
+        
+          
+          
+            <a href="/contact/" class="link"><i class='far fa-envelope'></i> 别来无恙</a>
+          
+        
+      
+      <a href="#share-menu" class="share-toggle"><i class="fas fa-share-alt">&nbsp;</i>Share</a>
+      
+
+    </menu>
+    
+
+    <a href="#share-menu" class="share-toggle"><i class="fas fa-share-alt fa-2x">&nbsp;</i></a>
+    <a href="#lang-menu" class="lang-toggle" lang="zh-cn">zh-cn</a>
+    <a href="#site-nav" class="nav-toggle"><i class="fas fa-bars fa-2x"></i></a>
+  </nav>
+  <menu id="lang-menu" class="flyout-menu">
+  <a href="#" lang="zh-cn" class="link active">中文 (zh-cn)</a>
+  
+    
+      
+        <a href="/en" lang="en" class="no-lang link">English (en)</a>
+      
+    
+      
+    
+  
+</menu>
+
+  
+    <menu id="share-menu" class="flyout-menu">
+      <h1>Share Post</h1>
+      
+
+
+
+
+  
+    
+    <a href="//twitter.com/share?text=kafka%20%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f" target="_blank" rel="noopener" class="share-btn twitter">
+        <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f" target="_blank" rel="noopener" class="share-btn facebook">
+        <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
+        </a>
+  
+
+  
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f&amp;title=kafka%20%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d" target="_blank" rel="noopener" class="share-btn reddit">
+          <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
+        </a>
+  
+
+  
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f&amp;title=kafka%20%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d" target="_blank" rel="noopener" class="share-btn linkedin">
+            <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
+          </a>
+  
+
+  
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f&amp;description=kafka%20%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d" target="_blank" rel="noopener" class="share-btn pinterest">
+          <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+          <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
+        </a>
+  
+
+
+    </menu>
+  
+</header>
+
+    <div id="wrapper">
+      <section id="site-intro">
+  <a href="/"><img src="/img/main/logo.jpg" class="circle" width="" alt="Hugo Future Imperfect Slim" /></a>
+  <header>
+    <h1>陈sir</h1>
+  </header>
+  <main>
+    <p>因为技术能树点歪了而成为云计算架构师</p>
+  </main>
+  
+    <footer>
+      <ul class="socnet-icons">
+        
+
+        <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/example" target="_blank" rel="noopener" title="Flickr" class="fab fa-flickr"></a></li>
+
+
+
+
+<li><a href="//linkedin.com/in/example" target="_blank" rel="noopener" title="LinkedIn" class="fab fa-linkedin"></a></li>
+<li><a href="//linkedin.com/company/examplebusiness" target="_blank" rel="noopener" title="LinkedIn Company" class="fab fa-linkedin"></a></li>
+
+
+
+<li><a href="//facebook.com/example" target="_blank" rel="noopener" title="Facebook" class="fab fa-facebook"></a></li>
+<li><a href="//reddit.com/user/example" target="_blank" rel="noopener" title="Reddit" class="fab fa-reddit"></a></li>
+
+
+
+
+
+
+
+<li><a href="//instagram.com/example" target="_blank" rel="noopener" title="Instagram" class="fab fa-instagram"></a></li>
+
+<li><a href="//twitter.com/example" target="_blank" rel="noopener" title="Twitter" class="fab fa-twitter"></a></li>
+
+
+<li><a href="//pinterest.com/example" target="_blank" rel="noopener" title="Pinterest" class="fab fa-pinterest-p"></a></li>
+<li><a href="//telegram.me/example" target="_blank" rel="noopener" title="telegram" class="fab fa-telegram"></a></li>
+
+
+
+<li><a href="//researchgate.net/profile/example" target="_blank" rel="noopener" title="Research Gate"><i class="ai ai-researchgate"></i></a></li>
+<li><a href="//keybase.io/example" target="_blank" rel="noopener" title="keybase" class="fab fa-keybase"></a></li>
+<li><a href="//example.com/@example" target="_blank" rel="noopener" title="mastodon" class="fab fa-mastodon"></a></li>
+<li><a href="mailto:cen1024@163.com" target="_blank" title="Email" class="far fa-envelope"></a></li>
+
+      </ul>
+    </footer>
+  
+</section>
+
+      <main id="site-main">
+        <article class="post">
+  <header>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <div class="title">
+    
+        <h2><a href="/blog/kafka-introduce/">kafka 概念介绍</a></h2>
+    
+    
+</div>
+  <div class="meta">
+    <time class="published" datetime="0001-01-01 00:00:00 &#43;0000 UTC">
+      January 1, 0001
+    </time>
+    <span class="author">陈 sir</span>
+    
+      <p>1 分钟</p>
+    
+  </div>
+</header>
+
+  <section id="socnet-share">
+    
+
+
+
+
+  
+    
+    <a href="//twitter.com/share?text=kafka%20%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f" target="_blank" rel="noopener" class="share-btn twitter">
+        <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f" target="_blank" rel="noopener" class="share-btn facebook">
+        <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
+        </a>
+  
+
+  
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f&amp;title=kafka%20%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d" target="_blank" rel="noopener" class="share-btn reddit">
+          <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
+        </a>
+  
+
+  
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f&amp;title=kafka%20%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d" target="_blank" rel="noopener" class="share-btn linkedin">
+            <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
+          </a>
+  
+
+  
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f&amp;description=kafka%20%e6%a6%82%e5%bf%b5%e4%bb%8b%e7%bb%8d" target="_blank" rel="noopener" class="share-btn pinterest">
+          <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-introduce%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+          <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
+        </a>
+  
+
+
+  </section>
+  
+  <a href="/blog/kafka-introduce/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+  <div class="content">
+    
+
+<h1 id="kafka-基础概念">kafka 基础概念</h1>
+
+<h2 id="基础概念">基础概念</h2>
+
+<ul>
+<li><strong>Producer</strong>: 消息发送者</li>
+<li><strong>broker</strong>： kafka节点</li>
+<li>consumer: 消费者</li>
+<li>topic： 主题，一组消息的集合，分布在多个分区里</li>
+<li>partition：分区， 一个分区只能属于一个主题。在存储曾铭，分区可以看做一个可追加log日志文件，每个消息在分区中表现为一条日志，而消息的位置，通过offset 来记录，offset 是消息在分区分区中的唯一标示，offset保证消息的顺序性，注意，offset 不跨分区，在不同的分区中，offset 可能相同。</li>
+<li>replica：副本，对分区的冗余，会尽量分布在不同的节点。一个分区会有leader 和 follower 两种角色的副本。</li>
+<li>AR（assignded-replica）：分区中的所有副本统称为AR</li>
+<li>ISR (in-sync replica)：与 leader 副本保持一定程度同步的副本成为 ISR， ISR 是AR 的子集。</li>
+<li>OSR (out-of-sync replica)：与leader 同步滞后达到一定程度的副本，这个一定程度可以通过参数进行设置。AR=ISR+OSR</li>
+<li>HW(high watermark 高水位)：指一个特殊的OFFSET，消费者，只能获取HW 这个offset 之前的消息，即便HW 之后有其他消息，对消费者而言也是不可见的。（与ISR 强相关）</li>
+<li>LSO(logstartoffset)：消息开始的初始offset，值为0</li>
+<li>LEO(logendoffset)：当前分区中，下一条待写入消息的offset。</li>
+</ul>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="offset" href="/img/main/offset-introduce.png" data-caption="offset"><img src="/img/main/offset-introduce.png"></a>
+    <div class="caption">offset</div>
+  </div>
+
+
+
+<h2 id="消息的发送过程">消息的发送过程</h2>
+
+<p>producer-&gt; 拦截器（非必须） -&gt; 序列化器 -&gt; 分区器- broker</p>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="producer-flow" href="/img/main/producer-flow.png" data-caption="producer-flow"><img src="/img/main/producer-flow.png"></a>
+    <div class="caption">producer-flow</div>
+  </div>
+
+
+
+<h2 id="消息投递方式-p2p-pub-sub">消息投递方式 P2P , PUB/SUB</h2>
+
+<p>kafka 通过消费者组和消费者来适配两种模式</p>
+
+<p>如果所有的消费者头隶属于同一个消费者组，那么消息只会投递给其中一个消费者，相当于P2P模式</p>
+
+<p>如果消费者隶属于不同的消费者组，那么消息会发送给所有的消费者组。适配PUB/SUB模式</p>
+
+<h2 id="消费位移-offset">消费位移（offset）</h2>
+
+<p>指消费者在kafka中的消费位置，注意这个角度跟消息的offset 不是一个意思。消息的offset 是指消息在kafka中的偏移量，而消费位移，是指消费者在分区中将消息消费到了哪一条。消费者在消费完消息之后需要提交消费位移。注意提交的消费位移的值，当前消费过的最后一条消息的offset+1,而不是当前消费了的消息的offset</p>
+
+<blockquote>
+<p>旧的消费这的消费位移存储在zk中，而新添加的消费这的消费位移存储在kafka的内部主题 <code>_consumer_offsets</code> 中</p>
+</blockquote>
+
+<h2 id="消费位移的提交">消费位移的提交</h2>
+
+<p>kafka 默认是自动提交（客户端参数,enable.auto.commit），然后自动提交容易造成消息丢失。消费位移的提交并不是每消费一条消息就提交，而是定期提交，通过参数(<code>auto.commit.interval.ms</code>) 指定提交间隔。默认是5秒</p>
+
+<h2 id="再均衡">再均衡</h2>
+
+<p>只一个一个分区的的所有权，从一个消费者分配給另一个消费者的过程。再均衡存在以下影响</p>
+
+<ol>
+<li>再均衡期间，消费组不可用。</li>
+<li>可能存在重复消费。例如一个消费者A消费完后，还没来得及提交消费位移，就发生了再均衡。而消费者A被分配到了另一个分区。</li>
+<li>再均衡时，可以通过subscribe()方法中的，均衡监听器，进行处理。
+
+<ol>
+<li>onPartionRevoked 方法，这个方法在再均衡发生之前，和消费者停止读取消息之后被调用。可以用来处理提交消费位移。避免不必要的重复消费。</li>
+</ol></li>
+</ol>
+
+  </div>
+  <footer>
+    <ul class="stats">
+  
+    
+    
+      <li class="categories">
+        <ul>
+          
+            
+            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/mq">mq</a></li>
+          
+        </ul>
+      </li>
+    
+  
+  
+    
+    
+      <li class="tags">
+        <ul>
+          
+            
+            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/kafka">kafka</a></li>
+          
+        </ul>
+      </li>
+    
+  
+</ul>
+
+  </footer>
+</article>
+
+    <div id="gitalk-container">
+        <script>
+            var gitalk = new Gitalk({
+  clientID: "a83bc47e22d46426006c",
+  clientSecret: '4df05cf9cb02897883f87f3d1c8552ed88d47a2a',
+  repo: 'yudar1024.github.io',
+  owner: 'yudar1024',
+  admin: ['yudar1024'],
+  id: location.pathname,
+  distractionFreeMode: true  
+})
+
+gitalk.render('gitalk-container')
+        </script>
+    </div>
+
+
+<div class="pagination">
+  
+  
+    <a href="/blog/deploy-glusterfs-hekti-in-k8s/" class="button big next">kubernetes 集群中部署 glusterfs 与 heketi <i class="fas fa-angle-right"></i></a>
+  
+</div>
+
+
+      </main>
+      <section id="site-sidebar">
+  
+    <section id="recent-posts">
+      <header>
+        <h1>最新文章</h1>
+      </header>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/deploy-rabbitmq-cluster/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/deploy-rabbitmq-cluster/">kubernetes 部署 rabbitmq 集群</a></h1>
+          <time class="published" datetime="">October 16, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/spring-security-with-oidc/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/spring-security-with-oidc/">spring security 与 keyclaok 集成，使用 oidc 登录</a></h1>
+          <time class="published" datetime="">September 25, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/service-introduction/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/service-introduction/">kubernetes service 介绍</a></h1>
+          <time class="published" datetime="">September 23, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/keycloak-ssl-configuration/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/keycloak-ssl-configuration/">Keycloak 配置SSL 实现HTTPS 访问</a></h1>
+          <time class="published" datetime="">September 21, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/software-knowledge/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/software-knowledge/">日常软件使用技巧</a></h1>
+          <time class="published" datetime="">September 17, 2019</time>
+        </header>
+      </article>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/using-heketi-to-maintain-glusterfs/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/using-heketi-to-maintain-glusterfs/">使用 heketi 维护 glusterfs</a></h1>
+          <time class="published" datetime="">September 11, 2019</time>
+        </header>
+      </article>
+      
+      
+        <a href="/blog/" class="button">查看更多</a>
+      
+    </section>
+  
+
+  
+    
+      <section id="categories">
+        <header>
+          <h1><a href="/categories">分类</a></h1>
+        </header>
+        <ul>
+          
+            
+          
+          
+          <li>
+            
+              <a href="/categories/kubernetes/">kubernetes<span class="count">5</span></a>
+            
+          
+          <li>
+            
+              <a href="/categories/keycloak/">keycloak<span class="count">1</span></a>
+            
+          
+          <li>
+            
+              <a href="/categories/mq/">mq<span class="count">1</span></a>
+            
+          
+          <li>
+            
+              <a href="/categories/software-knowledge/">software-knowledge<span class="count">1</span></a>
+            
+          
+          <li>
+            
+              <a href="/categories/%E5%AE%89%E5%85%A8/">安全<span class="count">1</span></a>
+            
+          
+          </li>
+        </ul>
+      </section>
+    
+  
+
+  <section id="mini-bio">
+    <header>
+      <h1>关于</h1>
+    </header>
+    <p>时光记录</p>
+    <footer>
+      <a href="/about" class="button">了解更多</a>
+    </footer>
+  </section>
+</section>
+
+      <footer id="site-footer">
+  
+      <ul class="socnet-icons">
+        
+
+        <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/example" target="_blank" rel="noopener" title="Flickr" class="fab fa-flickr"></a></li>
+
+
+
+
+<li><a href="//linkedin.com/in/example" target="_blank" rel="noopener" title="LinkedIn" class="fab fa-linkedin"></a></li>
+<li><a href="//linkedin.com/company/examplebusiness" target="_blank" rel="noopener" title="LinkedIn Company" class="fab fa-linkedin"></a></li>
+
+
+
+<li><a href="//facebook.com/example" target="_blank" rel="noopener" title="Facebook" class="fab fa-facebook"></a></li>
+<li><a href="//reddit.com/user/example" target="_blank" rel="noopener" title="Reddit" class="fab fa-reddit"></a></li>
+
+
+
+
+
+
+
+<li><a href="//instagram.com/example" target="_blank" rel="noopener" title="Instagram" class="fab fa-instagram"></a></li>
+
+<li><a href="//twitter.com/example" target="_blank" rel="noopener" title="Twitter" class="fab fa-twitter"></a></li>
+
+
+<li><a href="//pinterest.com/example" target="_blank" rel="noopener" title="Pinterest" class="fab fa-pinterest-p"></a></li>
+<li><a href="//telegram.me/example" target="_blank" rel="noopener" title="telegram" class="fab fa-telegram"></a></li>
+
+
+
+<li><a href="//researchgate.net/profile/example" target="_blank" rel="noopener" title="Research Gate"><i class="ai ai-researchgate"></i></a></li>
+<li><a href="//keybase.io/example" target="_blank" rel="noopener" title="keybase" class="fab fa-keybase"></a></li>
+<li><a href="//example.com/@example" target="_blank" rel="noopener" title="mastodon" class="fab fa-mastodon"></a></li>
+<li><a href="mailto:cen1024@163.com" target="_blank" title="Email" class="far fa-envelope"></a></li>
+
+      </ul>
+  
+  <p class="copyright">
+    
+      &copy; 2019
+      
+        陈sir 的流水帐
+      
+    . <br>
+    主题: <a href='https://themes.gohugo.io/hugo-future-imperfect-slim/' target='_blank' rel='noopener'>Hugo Future Imperfect Slim</a><br>移植自 <a href='https://html5up.net/future-imperfect' target='_blank' rel='noopener'>HTML5 UP</a> | 由 <a href='https://gohugo.io/' target='_blank' rel='noopener' title='0.58.0'>Hugo</a> 驱动
+  </p>
+</footer>
+<a id="back-to-top" href="#" class="fas fa-arrow-up fa-2x"></a>
+
+      
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js">
+</script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/html.min.js">
+  </script><script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/css.min.js">
+  </script><script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/js.min.js">
+  </script><script
+  src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/toml.min.js">
+  </script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/skel/3.0.1/skel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
+<script src=/js/util.js></script>
+<script src=/js/main.js></script>
+<script src=/js/add-on.js></script>
+
+
+
+
+
+    </div>
+  </body>
+</html>
