@@ -9,14 +9,11 @@
 
   <meta name="generator" content="Hugo 0.58.0" />
   <meta itemprop="name" content="kafka 概念介绍">
-<meta itemprop="description" content="kafka 基础概念 基础概念  Producer: 消息发送者 broker： kafka节点 consumer: 消费者 topic： 主题，一组消息的集合，分布在多个分区里 partition：分区， 一个分区只能属于一个主题。在存储曾铭，分区可以看做一个可追加log日志文件，每个消息在分区中表现为一条日志，而消息的位置，通过offset 来记录，offset 是消息在分区分区中的唯一标示，offset保证消息的顺序性，注意，offset 不跨分区，在不同的分区中，offset 可能相同。 replica：副本，对分区的冗余，会尽量分布在不同的节点。一个分区会有leader 和 follower 两种角色的副本。 AR（assignded-replica）：分区中的所有副本统称为AR ISR (in-sync replica)：与 leader 副本保持一定程度同步的副本成为 ISR， ISR 是AR 的子集。 OSR (out-of-sync replica)：与leader 同步滞后达到一定程度的副本，这个一定程度可以通过参数进行设置。AR=ISR&#43;OSR HW(high watermark 高水位)：指一个特殊的OFFSET，消费者，只能获取HW 这个offset 之前的消息，即便HW 之后有其他消息，对消费者而言也是不可见的。（与ISR 强相关） LSO(logstartoffset)：消息开始的初始offset，值为0 LEO(logendoffset)：当前分区中，下一条待写入消息的offset。  offset消息的发送过程 producer-&gt; 拦截器（非必须） -&gt; 序列化器 -&gt; 分区器- broker
-producer-flow消息投递方式 P2P , PUB/SUB kafka 通过消费者组和消费者来适配两种模式
-如果所有的消费者头隶属于同一个消费者组，那么消息只会投递给其中一个消费者，相当于P2P模式
-如果消费者隶属于不同的消费者组，那么消息会发送给所有的消费者组。适配PUB/SUB模式
-消费位移（offset） 指消费者在kafka中的消费位置，注意这个角度跟消息的offset 不是一个意思。消息的offset 是指消息在kafka中的偏移量，而消费位移，是指消费者在分区中将消息消费到了哪一条。消费者在消费完消息之后需要提交消费位移。注意提交的消费位移的值，当前消费过的最后一条消息的offset&#43;1,而不是当前消费了的消息的offset">
+<meta itemprop="description" content="kafka 概念介绍">
 
 
-
+<meta itemprop="datePublished" content="2019-10-21T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-10-21T00:00:00&#43;00:00" />
 <meta itemprop="wordCount" content="80">
 
 
@@ -24,22 +21,15 @@
 <meta itemprop="keywords" content="kafka," />
 
   <meta property="og:title" content="kafka 概念介绍" />
-<meta property="og:description" content="kafka 基础概念 基础概念  Producer: 消息发送者 broker： kafka节点 consumer: 消费者 topic： 主题，一组消息的集合，分布在多个分区里 partition：分区， 一个分区只能属于一个主题。在存储曾铭，分区可以看做一个可追加log日志文件，每个消息在分区中表现为一条日志，而消息的位置，通过offset 来记录，offset 是消息在分区分区中的唯一标示，offset保证消息的顺序性，注意，offset 不跨分区，在不同的分区中，offset 可能相同。 replica：副本，对分区的冗余，会尽量分布在不同的节点。一个分区会有leader 和 follower 两种角色的副本。 AR（assignded-replica）：分区中的所有副本统称为AR ISR (in-sync replica)：与 leader 副本保持一定程度同步的副本成为 ISR， ISR 是AR 的子集。 OSR (out-of-sync replica)：与leader 同步滞后达到一定程度的副本，这个一定程度可以通过参数进行设置。AR=ISR&#43;OSR HW(high watermark 高水位)：指一个特殊的OFFSET，消费者，只能获取HW 这个offset 之前的消息，即便HW 之后有其他消息，对消费者而言也是不可见的。（与ISR 强相关） LSO(logstartoffset)：消息开始的初始offset，值为0 LEO(logendoffset)：当前分区中，下一条待写入消息的offset。  offset消息的发送过程 producer-&gt; 拦截器（非必须） -&gt; 序列化器 -&gt; 分区器- broker
-producer-flow消息投递方式 P2P , PUB/SUB kafka 通过消费者组和消费者来适配两种模式
-如果所有的消费者头隶属于同一个消费者组，那么消息只会投递给其中一个消费者，相当于P2P模式
-如果消费者隶属于不同的消费者组，那么消息会发送给所有的消费者组。适配PUB/SUB模式
-消费位移（offset） 指消费者在kafka中的消费位置，注意这个角度跟消息的offset 不是一个意思。消息的offset 是指消息在kafka中的偏移量，而消费位移，是指消费者在分区中将消息消费到了哪一条。消费者在消费完消息之后需要提交消费位移。注意提交的消费位移的值，当前消费过的最后一条消息的offset&#43;1,而不是当前消费了的消息的offset" />
+<meta property="og:description" content="kafka 概念介绍" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://yudar1024.github.io/blog/kafka-introduce/" />
-<meta property="og:site_name" content="陈sir 的流水帐" />
+<meta property="article:published_time" content="2019-10-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-10-21T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
 
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="kafka 概念介绍"/>
-<meta name="twitter:description" content="kafka 基础概念 基础概念  Producer: 消息发送者 broker： kafka节点 consumer: 消费者 topic： 主题，一组消息的集合，分布在多个分区里 partition：分区， 一个分区只能属于一个主题。在存储曾铭，分区可以看做一个可追加log日志文件，每个消息在分区中表现为一条日志，而消息的位置，通过offset 来记录，offset 是消息在分区分区中的唯一标示，offset保证消息的顺序性，注意，offset 不跨分区，在不同的分区中，offset 可能相同。 replica：副本，对分区的冗余，会尽量分布在不同的节点。一个分区会有leader 和 follower 两种角色的副本。 AR（assignded-replica）：分区中的所有副本统称为AR ISR (in-sync replica)：与 leader 副本保持一定程度同步的副本成为 ISR， ISR 是AR 的子集。 OSR (out-of-sync replica)：与leader 同步滞后达到一定程度的副本，这个一定程度可以通过参数进行设置。AR=ISR&#43;OSR HW(high watermark 高水位)：指一个特殊的OFFSET，消费者，只能获取HW 这个offset 之前的消息，即便HW 之后有其他消息，对消费者而言也是不可见的。（与ISR 强相关） LSO(logstartoffset)：消息开始的初始offset，值为0 LEO(logendoffset)：当前分区中，下一条待写入消息的offset。  offset消息的发送过程 producer-&gt; 拦截器（非必须） -&gt; 序列化器 -&gt; 分区器- broker
-producer-flow消息投递方式 P2P , PUB/SUB kafka 通过消费者组和消费者来适配两种模式
-如果所有的消费者头隶属于同一个消费者组，那么消息只会投递给其中一个消费者，相当于P2P模式
-如果消费者隶属于不同的消费者组，那么消息会发送给所有的消费者组。适配PUB/SUB模式
-消费位移（offset） 指消费者在kafka中的消费位置，注意这个角度跟消息的offset 不是一个意思。消息的offset 是指消息在kafka中的偏移量，而消费位移，是指消费者在分区中将消息消费到了哪一条。消费者在消费完消息之后需要提交消费位移。注意提交的消费位移的值，当前消费过的最后一条消息的offset&#43;1,而不是当前消费了的消息的offset"/>
+<meta name="twitter:description" content="kafka 概念介绍"/>
 <meta name="twitter:site" content="@example"/>
 
   
@@ -264,10 +254,12 @@
         <h2><a href="/blog/kafka-introduce/">kafka 概念介绍</a></h2>
     
     
+        <p>kafka 概念介绍</p>
+    
 </div>
   <div class="meta">
-    <time class="published" datetime="0001-01-01 00:00:00 &#43;0000 UTC">
-      January 1, 0001
+    <time class="published" datetime="2019-10-21 00:00:00 &#43;0000 UTC">
+      October 21, 2019
     </time>
     <span class="author">陈 sir</span>
     
@@ -486,8 +478,8 @@ gitalk.render('gitalk-container')
 
 <div class="pagination">
   
+    <a href="/blog/deploy-rabbitmq-cluster/" class="button big previous"><i class="fas fa-angle-left"></i> kubernetes 部署 rabbitmq 集群</a>
   
-    <a href="/blog/deploy-glusterfs-hekti-in-k8s/" class="button big next">kubernetes 集群中部署 glusterfs 与 heketi <i class="fas fa-angle-right"></i></a>
   
 </div>
 
@@ -499,6 +491,21 @@ gitalk.render('gitalk-container')
       <header>
         <h1>最新文章</h1>
       </header>
+      
+      <article class="mini-post">
+        <section>
+          
+  <a href="/blog/kafka-introduce/" class="image featured">
+    <img src="/img/main/title.png" alt="">
+  </a>
+
+
+        </section>
+        <header>
+          <h1><a href="/blog/kafka-introduce/">kafka 概念介绍</a></h1>
+          <time class="published" datetime="">October 21, 2019</time>
+        </header>
+      </article>
       
       <article class="mini-post">
         <section>
@@ -572,21 +579,6 @@ gitalk.render('gitalk-container')
         <header>
           <h1><a href="/blog/software-knowledge/">日常软件使用技巧</a></h1>
           <time class="published" datetime="">September 17, 2019</time>
-        </header>
-      </article>
-      
-      <article class="mini-post">
-        <section>
-          
-  <a href="/blog/using-heketi-to-maintain-glusterfs/" class="image featured">
-    <img src="/img/main/title.png" alt="">
-  </a>
-
-
-        </section>
-        <header>
-          <h1><a href="/blog/using-heketi-to-maintain-glusterfs/">使用 heketi 维护 glusterfs</a></h1>
-          <time class="published" datetime="">September 11, 2019</time>
         </header>
       </article>
       
