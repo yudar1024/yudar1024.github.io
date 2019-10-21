@@ -69,9 +69,7 @@ Definition：镜像定义，包括三个部分ha-mode, ha-params, ha-sync-mode
 	ha-params：ha-mode模式需要用到的参数
 	ha-sync-mode：进行队列中消息的同步方式，有效值为automatic和manual
 priority：可选参数，policy的优先级
-————————————————
-版权声明：本文为CSDN博主「朱小厮」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/u013256816/article/details/71097186
+
 ```
 
 例如已mirror 开头的对里，都进行镜像
