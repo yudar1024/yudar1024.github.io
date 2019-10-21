@@ -2,8 +2,8 @@
 author = "陈 sir"
 categories = ["mq"]
 tags = ["kafka"]
-date = "2019-10-121"
-description = ""
+date = "2019-10-21"
+description = "kafka 概念介绍"
 featured = "main/title.png"
 featuredalt = ""
 featuredpath = ""
