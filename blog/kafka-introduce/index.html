@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-10-21T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-10-21T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="80">
+<meta itemprop="wordCount" content="235">
 
 
 
@@ -263,7 +263,7 @@
     </time>
     <span class="author">陈 sir</span>
     
-      <p>1 分钟</p>
+      <p>2 分钟</p>
     
   </div>
 </header>
@@ -364,7 +364,9 @@
 
 
 
-<h2 id="消息的发送过程">消息的发送过程</h2>
+<h2 id="消息处理">消息处理</h2>
+
+<h3 id="消息的发送过程">消息的发送过程</h3>
 
 <p>producer-&gt; 拦截器（非必须） -&gt; 序列化器 -&gt; 分区器- broker</p>
 
@@ -391,7 +393,7 @@
 
 
 
-<h2 id="消息投递方式-p2p-pub-sub">消息投递方式 P2P , PUB/SUB</h2>
+<h3 id="消息投递方式-p2p-pub-sub">消息投递方式 P2P , PUB/SUB</h3>
 
 <p>kafka 通过消费者组和消费者来适配两种模式</p>
 
@@ -399,7 +401,7 @@
 
 <p>如果消费者隶属于不同的消费者组，那么消息会发送给所有的消费者组。适配PUB/SUB模式</p>
 
-<h2 id="消费位移-offset">消费位移（offset）</h2>
+<h3 id="消费位移-offset">消费位移（offset）</h3>
 
 <p>指消费者在kafka中的消费位置，注意这个角度跟消息的offset 不是一个意思。消息的offset 是指消息在kafka中的偏移量，而消费位移，是指消费者在分区中将消息消费到了哪一条。消费者在消费完消息之后需要提交消费位移。注意提交的消费位移的值，当前消费过的最后一条消息的offset+1,而不是当前消费了的消息的offset</p>
 
@@ -407,11 +409,11 @@
 <p>旧的消费这的消费位移存储在zk中，而新添加的消费这的消费位移存储在kafka的内部主题 <code>_consumer_offsets</code> 中</p>
 </blockquote>
 
-<h2 id="消费位移的提交">消费位移的提交</h2>
+<h3 id="消费位移的提交">消费位移的提交</h3>
 
 <p>kafka 默认是自动提交（客户端参数,enable.auto.commit），然后自动提交容易造成消息丢失。消费位移的提交并不是每消费一条消息就提交，而是定期提交，通过参数(<code>auto.commit.interval.ms</code>) 指定提交间隔。默认是5秒</p>
 
-<h2 id="再均衡">再均衡</h2>
+<h3 id="再均衡">再均衡</h3>
 
 <p>只一个一个分区的的所有权，从一个消费者分配給另一个消费者的过程。再均衡存在以下影响</p>
 
@@ -424,6 +426,234 @@
 <li>onPartionRevoked 方法，这个方法在再均衡发生之前，和消费者停止读取消息之后被调用。可以用来处理提交消费位移。避免不必要的重复消费。</li>
 </ol></li>
 </ol>
+
+<h2 id="主题的创建">主题的创建</h2>
+
+<table>
+<thead>
+<tr>
+<th align="left">创建方法</th>
+<th align="left">相关参数</th>
+<th align="left">参数说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">自动创建</td>
+<td align="left">auto.create.topics.enable (default=true)</td>
+<td align="left">如果topic不存在，则自动创建</td>
+</tr>
+
+<tr>
+<td align="left">自动创建</td>
+<td align="left">default.replica.factor(default=1)</td>
+<td align="left">自动创建topic的副本数</td>
+</tr>
+
+<tr>
+<td align="left">自动创建</td>
+<td align="left">num.partitions</td>
+<td align="left">自动创建topic的分区数</td>
+</tr>
+
+<tr>
+<td align="left">手动方式</td>
+<td align="left">kafka-topic.sh 默认工具</td>
+<td align="left">kafka-topic.sh &ndash;zookeeper localhost:2181/kafka &ndash;create &ndash;topic  test &ndash;partitions 4 &ndash;replica-factor 2</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="分区管理">分区管理</h2>
+
+<h3 id="分区副本的分配">分区副本的分配</h3>
+
+<p>在创建主题时，如果使用了repilica-assignment参数，就按照指定方案进行分配。如果没有指定，使用默认的方案进行分配。</p>
+
+<p><strong>默认分配方案</strong>（kafka-topic.sh 脚本命令创建）</p>
+
+<ul>
+<li>未设置机架分配方案，当所有broker都未设置broker-rack，或者使用disable-rack-aware 参数创建时。</li>
+</ul>
+
+<p><strong>分区修改</strong></p>
+
+<p>分区只能增加不能缩减。</p>
+
+<blockquote>
+<p>理由，得不偿失，1 需要考虑删除分区消息如何处理，如果复制到剩下的分区，资源站用太大。3 对于spark flink 此类组件，需要时间戳。消息的时间戳如何保存？</p>
+</blockquote>
+
+<p><strong>优先副本</strong></p>
+
+<p>在分区的副本中，处于第一位置的副本被称为优先副本，优先副本在leader 宕机时，会优先被选举为新的leader</p>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="preferleader" href="/img/main/preferleader.png" data-caption="preferleader"><img src="/img/main/preferleader.png"></a>
+    <div class="caption">preferleader</div>
+  </div>
+
+
+
+<p><strong>自动平衡</strong></p>
+
+<p>auto.leader.rebalance.enable，默认为true，生产环境推荐设置为false。再平衡会影响可用性。当设置为true时，kafka会有一个定时任务，（默认是5分钟通过 leader.imbalacne.check.interval.seconds设置）定时检查集群的不平衡率，如果不平衡率超过leader.imbalance.per.broker.percentege参数的值（默认10%），就执行自动平衡。</p>
+
+<p><strong>不平衡率</strong></p>
+
+<p>不平衡率=非优先副本的leader个数/分区总数</p>
+
+<h3 id="分区重分配">分区重分配</h3>
+
+<p>解决的问题</p>
+
+<ol>
+<li><p>当删除节点时，期望将该节点上的分区副本迁移到其他节点上。</p></li>
+
+<li><p>当添加节点时，期望能够将已经创建的主题的负载均匀地分配到新节点中。</p></li>
+</ol>
+
+<p>kakfa通过 kafka-reassign-partitions.sh 脚本来实现重分配，主要氛围三步。</p>
+
+<ol>
+<li>创建一个包含主题清单的json文件</li>
+<li>根据主题清单和broker节点生成重新分配方案</li>
+<li>执行方案</li>
+</ol>
+
+<p>json文件格式如下</p>
+
+<pre><code class="language-json">{
+    &quot;topics&quot;:[
+        {&quot;topic&quot;:&quot;topic1&quot;}
+    ],
+    &quot;version&quot;:1
+}
+</code></pre>
+
+<p>运行</p>
+
+<pre><code class="language-shell">kafka-reassign-partitions.sh --zookeeper localhost:2181/kafka --generate --topic-to-move-json move.json --broker-list 0,2
+</code></pre>
+
+<p>运行后将会打印 current partition replica assignment，与 proposal partition reassginment configuration。 两个都是json格式，显示在控制台</p>
+
+<p>proposal 的json 内容保存为一个接送文档，proposal.json</p>
+
+<p>运行</p>
+
+<pre><code class="language-shell">kafka-reassgin-partitions.sh --zookeeper localhost:2181/kafka --execute --reassignement-json-file proposal.json
+</code></pre>
+
+<h3 id="复制限流">复制限流</h3>
+
+<p>在borker级别，通过如下两个参数来进行限流</p>
+
+<ul>
+<li>follower.replication.throttled.rate</li>
+<li>leader.replication.throttled.rate</li>
+</ul>
+
+<p>follower.replication.throttled.rate表示follower副本复制的速度，leader.replication.throttled.rate设置leader副本传输速度， 单位都为B/s 通常情况下，两者设置相同。</p>
+
+<p>在topic 级别，通过如下两个参数来进行下限流</p>
+
+<ul>
+<li>follower.replication.throttled.rate</li>
+<li>leader.replication.throttled.rate</li>
+</ul>
+
+<p>follower.replication.throttled.rate表示follower副本复制的速度，leader.replication.throttled.rate设置leader副本传输速度， 单位都为B/s 通常情况下，两者设置相同。</p>
+
+<p>四个参数都通过kafka-config.sh 命令来配置,以broker级别为例</p>
+
+<pre><code class="language-shell">kafka-config.sh --zookeeper localhost:2181/kafka --entity-type brokers/topics --entity-name 1 --alter --add-config follower.replication.throttled.rate=1024,leader.replication.throttled.rate=1024
+</code></pre>
+
+<h3 id="如何选择合适的分区数">如何选择合适的分区数</h3>
+
+<p>kafka分区，受linux 文件描述符上限的限制。</p>
+
+<h2 id="日志存储">日志存储</h2>
+
+<h3 id="目录结构">目录结构</h3>
+
+<p>一个有四个分区的主题会在kafkalog 文件夹下生成四个文件夹，分别以<topigc-name>-log-[partition-number] 命名。</p>
+
+<p>一个分区对应一个log，在log文件夹中，日志文件被分成多个 log segment， 表示一个大log中的一小段。</p>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="日志关系" href="/img/main/log-relation.png" data-caption="日志关系"><img src="/img/main/log-relation.png"></a>
+    <div class="caption">日志关系</div>
+  </div>
+
+
+
+<h3 id="日志文件">日志文件</h3>
+
+<p><topigc-name>-log-[partition-number] 在目录下游很多.log 结尾的日志文件。每个日志文件都有一个同名，但扩展名为.index （偏移量索引文件） 与 .timeindex （时间戳索引文件） 的文件。log segement 文件的名称为 <base-offset>.log。 base-offset 是log segment的起始offset，第一个为0，为文件名必须是20位数，不足的，在前面补0</p>
+
+<pre><code class="language-shell">00000000000000000000.log
+00000000000000000251.log
+</code></pre>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="目录结构" href="/img/main/foldertree.png" data-caption="目录结构"><img src="/img/main/foldertree.png"></a>
+    <div class="caption">目录结构</div>
+  </div>
+
+
+
+<h3 id="日志索引">日志索引</h3>
 
   </div>
   <footer>
