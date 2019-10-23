@@ -2,26 +2,34 @@
 <html lang="zh-cn">
   <head>
   <meta charset="utf-8">
-<title>oauth2 - 陈sir 的流水帐</title>
+<title>kafka 深入理解 - 陈sir 的流水帐</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
 
   <meta name="generator" content="Hugo 0.58.0" />
-  <meta itemprop="name" content="oauth2">
-<meta itemprop="description" content="要有希望">
+  <meta itemprop="name" content="kafka 深入理解">
+<meta itemprop="description" content="kafka 深入理解">
 
 
-  <meta property="og:title" content="oauth2" />
-<meta property="og:description" content="要有希望" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://yudar1024.github.io/tags/oauth2/" />
+<meta itemprop="datePublished" content="2019-10-23T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-10-23T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="84">
 
-<meta property="og:updated_time" content="2019-09-25T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
+
+
+<meta itemprop="keywords" content="kafka," />
+
+  <meta property="og:title" content="kafka 深入理解" />
+<meta property="og:description" content="kafka 深入理解" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yudar1024.github.io/blog/kafka-deep/" />
+<meta property="article:published_time" content="2019-10-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-10-23T00:00:00+00:00" /><meta property="og:site_name" content="陈sir 的流水帐" />
 
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="oauth2"/>
-<meta name="twitter:description" content="要有希望"/>
+<meta name="twitter:title" content="kafka 深入理解"/>
+<meta name="twitter:description" content="kafka 深入理解"/>
 <meta name="twitter:site" content="@example"/>
 
   
@@ -54,7 +62,7 @@
       <a href="/">
         
           
-            标签
+            陈 sir 的流水帐
           
         
       </a>
@@ -136,37 +144,37 @@
 
   
     
-    <a href="//twitter.com/share?text=oauth2&amp;url=https%3a%2f%2fyudar1024.github.io%2ftags%2foauth2%2f" target="_blank" rel="noopener" class="share-btn twitter">
+    <a href="//twitter.com/share?text=kafka%20%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f" target="_blank" rel="noopener" class="share-btn twitter">
         <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
       </a>
   
 
   
-      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2ftags%2foauth2%2f" target="_blank" rel="noopener" class="share-btn facebook">
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f" target="_blank" rel="noopener" class="share-btn facebook">
         <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
         </a>
   
 
   
-    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2ftags%2foauth2%2f&amp;title=oauth2" target="_blank" rel="noopener" class="share-btn reddit">
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f&amp;title=kafka%20%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3" target="_blank" rel="noopener" class="share-btn reddit">
           <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
         </a>
   
 
   
-        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2ftags%2foauth2%2f&amp;title=oauth2" target="_blank" rel="noopener" class="share-btn linkedin">
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f&amp;title=kafka%20%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3" target="_blank" rel="noopener" class="share-btn linkedin">
             <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
           </a>
   
 
   
-        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2ftags%2foauth2%2f&amp;description=oauth2" target="_blank" rel="noopener" class="share-btn pinterest">
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f&amp;description=kafka%20%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3" target="_blank" rel="noopener" class="share-btn pinterest">
           <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
         </a>
   
 
   
-        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2ftags%2foauth2%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f" target="_blank" class="share-btn email" data-proofer-ignore>
           <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
         </a>
   
@@ -189,8 +197,6 @@
     <footer>
       <ul class="socnet-icons">
         
-    <li><a href="/tags/oauth2/index.xml" type="application/rss+xml" target="_blank" title="RSS" class="fas fa-rss"></a></li>
-
 
         <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
 
@@ -239,42 +245,441 @@
 </section>
 
       <main id="site-main">
-        <h1>oauth2</h1>
-        
-        
-            <article class="post">
+        <article class="post">
   <header>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
   <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
   <div class="title">
     
-        <h2><a href="/blog/spring-security-with-oidc/">spring security 与 keyclaok 集成，使用 oidc 登录</a></h2>
+        <h2><a href="/blog/kafka-deep/">kafka 深入理解</a></h2>
     
     
-        <p>oidc spring security</p>
+        <p>kafka 深入理解</p>
     
 </div>
   <div class="meta">
-    <time class="published" datetime="2019-09-25 00:00:00 &#43;0000 UTC">
-      September 25, 2019
+    <time class="published" datetime="2019-10-23 00:00:00 &#43;0000 UTC">
+      October 23, 2019
     </time>
     <span class="author">陈 sir</span>
     
-      <p>3 分钟</p>
+      <p>1 分钟</p>
     
   </div>
 </header>
 
+  <section id="socnet-share">
+    
+
+
+
+
   
-  <a href="/blog/spring-security-with-oidc/" class="image featured">
+    
+    <a href="//twitter.com/share?text=kafka%20%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3&amp;url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f" target="_blank" rel="noopener" class="share-btn twitter">
+        <i class="fab fa-twitter"></i><p>&nbsp;Twitter</p>
+      </a>
+  
+
+  
+      <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f" target="_blank" rel="noopener" class="share-btn facebook">
+        <i class="fab fa-facebook"></i><p>&nbsp;Facebook</p>
+        </a>
+  
+
+  
+    <a href="//www.reddit.com/submit?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f&amp;title=kafka%20%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3" target="_blank" rel="noopener" class="share-btn reddit">
+          <i class="fab fa-reddit-alien"></i><p>&nbsp;Reddit</p>
+        </a>
+  
+
+  
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f&amp;title=kafka%20%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3" target="_blank" rel="noopener" class="share-btn linkedin">
+            <i class="fab fa-linkedin"></i><p>&nbsp;LinkedIn</p>
+          </a>
+  
+
+  
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f&amp;description=kafka%20%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3" target="_blank" rel="noopener" class="share-btn pinterest">
+          <i class="fab fa-pinterest-p"></i><p>&nbsp;Pinterest</p>
+        </a>
+  
+
+  
+        <a href="mailto:?subject=Check out this post by %7b%20%20%20%20%20%20%20%20map%5b%5d%7d&amp;body=https%3a%2f%2fyudar1024.github.io%2fblog%2fkafka-deep%2f" target="_blank" class="share-btn email" data-proofer-ignore>
+          <i class="fas fa-envelope"></i><p>&nbsp;Email</p>
+        </a>
+  
+
+
+  </section>
+  
+  <a href="/blog/kafka-deep/" class="image featured">
     <img src="/img/main/title.png" alt="">
   </a>
 
 
+  <div class="content">
+    
+
+<h1 id="kafka-服务端">kafka 服务端</h1>
+
+<h2 id="协议">协议</h2>
+
+<p>在2.0版本中支持43中协议，每种协议包含相同的请求头和不同的请求体。</p>
+
+<h3 id="请求头">请求头</h3>
+
+<p>请求头包含四个字段</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>api_key</td>
+<td>api标识 比如 produce fetch等。说明需要执行的动作</td>
+</tr>
+
+<tr>
+<td>api_version</td>
+<td>api 版本号</td>
+</tr>
+
+<tr>
+<td>corelation_id</td>
+<td>由客户端生成的请求id（全局唯一），服务端（broker）在处理完请求后也会把相同的id写回</td>
+</tr>
+
+<tr>
+<td>client_id</td>
+<td>客户端id</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="produce-request-结构">produce request 结构</h3>
+
+
+
+
   
-  <p>securityConfiguration.java 文件</p>
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="produce request 结构" href="/img/main/pr.png" data-caption="produce request 结构"><img src="/img/main/pr.png"></a>
+    <div class="caption">produce request 结构</div>
+  </div>
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="produce request 字段说明" href="/img/main/prinfo.png" data-caption="produce request 字段说明"><img src="/img/main/prinfo.png"></a>
+    <div class="caption">produce request 字段说明</div>
+  </div>
+
+
+
+<p>消息处理过程</p>
+
+<p>sender线程从消息累加器中获取消息<Partition,<ProduceBatch>&gt;，将消息转换为<strong><node,List<ProduceRequest>&gt;</strong>的格式。</p>
+
+<p>如果acks 的值为非0，客户端将异步等待服务端的相应（ProduceResponse）</p>
+
+<h3 id="produce-response-结构">produce response 结构</h3>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="响应结构" href="/img/main/produce-response.png" data-caption="响应结构"><img src="/img/main/produce-response.png"></a>
+    <div class="caption">响应结构</div>
+  </div>
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="响应结构说明" href="/img/main/producerep.png" data-caption="响应结构说明"><img src="/img/main/producerep.png"></a>
+    <div class="caption">响应结构说明</div>
+  </div>
+
+
+
+<h3 id="fetch-请求-响应的结构">Fetch 请求/响应的结构</h3>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="" href="/img/main/fetchreq.png" data-caption=""><img src="/img/main/fetchreq.png"></a>
+    <div class="caption"></div>
+  </div>
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="" href="/img/main/fetchreqinfo1.png" data-caption=""><img src="/img/main/fetchreqinfo1.png"></a>
+    <div class="caption"></div>
+  </div>
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="" href="/img/main/fetchreqinfo2.png" data-caption=""><img src="/img/main/fetchreqinfo2.png"></a>
+    <div class="caption"></div>
+  </div>
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="" href="/img/main/fetchrep.png" data-caption=""><img src="/img/main/fetchrep.png"></a>
+    <div class="caption"></div>
+  </div>
+
+
+
+<h2 id="时间轮-timingwheel">时间轮（timingwheel）</h2>
+
+<p>时间轮是一个存储定时任务的环形队列，底层采用数组实现。数组中的每个元素存放一个定时任务列表（TimerTaskList）。TimerTaskList是一个双向链表，链表中的每个元素表示一个任务项（TimerTaskEntry）封装了真正的任务（TimerTask）</p>
+
+<h3 id="相关概念">相关概念</h3>
+
+<ul>
+<li>tickms 基本时间跨度</li>
+<li>wheelSize 时间格数</li>
+<li>interval 总体时间跨度 = tickms x wheelSize</li>
+<li>层级，时间轮是分层级的，每一层的时间格数不变，但是上一层的基本时间跨度=下一层的总时间跨度</li>
+</ul>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="" href="/img/main/twheel.png" data-caption=""><img src="/img/main/twheel.png"></a>
+    <div class="caption"></div>
+  </div>
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="" href="/img/main/multiwheel.png" data-caption=""><img src="/img/main/multiwheel.png"></a>
+    <div class="caption"></div>
+  </div>
+
+
+
+<h3 id="延迟操作">延迟操作</h3>
+
+<p>当acks设置为-1时，会生成一个延时操作，只有消息同步到所有分区后才发送返回。</p>
+
+<h2 id="控制器">控制器</h2>
+
+<h3 id="选举">选举</h3>
+
+<p>控制器的选举，通过向zookeeper 中创建/controller 临时节点来进行竞争。成功创建的节点即为控制器。</p>
+
+<p>/controller 中包含三个变量</p>
+
+<ul>
+<li>version 固定为1</li>
+<li>broker_id 成功竞选为控制器的broker的id</li>
+<li>timestamp 竞选成功的时间</li>
+</ul>
+
+<p>/controller_epoch 记录控制器变化的次数。</p>
+
+<p><strong>控制器的职责</strong></p>
+
+<ol>
+<li>监听分区变化，通过在zookeeper中注册相关的handler来实现</li>
+<li>监听主题变化，通过在zookeeper中注册相关的handler来实现</li>
+<li>监听broker变化，在zookeeper中/brokers/ids节点添加BrokerChangehandler 实现</li>
+<li>读取集群相关信息进行管理</li>
+<li>启动并管理分区状态机与分区状态机</li>
+<li>更新集群元数据</li>
+</ol>
+
+<h3 id="关闭流程">关闭流程</h3>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="" href="/img/main/shutdown.png" data-caption=""><img src="/img/main/shutdown.png"></a>
+    <div class="caption"></div>
+  </div>
+
+
+
+<h3 id="分区leader-选举">分区leader 选举</h3>
+
+<p>分区的选举由控制器实施，策略为OfflinePartitionLeaderElectionStrategy，选取AR 中，第一个存活的副本。</p>
+
+  </div>
   <footer>
-    <a href="/blog/spring-security-with-oidc/" class="button big">阅读全文</a>
     <ul class="stats">
   
     
@@ -283,7 +688,7 @@
         <ul>
           
             
-            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/%E5%AE%89%E5%85%A8">安全</a></li>
+            <li><a class="article-category-link" href="https://yudar1024.github.io/categories/mq">mq</a></li>
           
         </ul>
       </li>
@@ -296,13 +701,7 @@
         <ul>
           
             
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/spring-security">spring security</a></li>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/oauth2">oauth2</a></li>
-          
-            
-            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/oidc">oidc</a></li>
+            <li><a class="article-category-link" href="https://yudar1024.github.io/tags/kafka">kafka</a></li>
           
         </ul>
       </li>
@@ -313,16 +712,30 @@
   </footer>
 </article>
 
-        
-        
+    <div id="gitalk-container">
+        <script>
+            var gitalk = new Gitalk({
+  clientID: "a83bc47e22d46426006c",
+  clientSecret: '4df05cf9cb02897883f87f3d1c8552ed88d47a2a',
+  repo: 'yudar1024.github.io',
+  owner: 'yudar1024',
+  admin: ['yudar1024'],
+  id: location.pathname,
+  distractionFreeMode: true  
+})
+
+gitalk.render('gitalk-container')
+        </script>
+    </div>
+
+
 <div class="pagination">
   
-    <a href="#" class="disabled button big previous"><i class="fas fa-angle-left"></i></a>
+    <a href="/blog/kafka-introduce/" class="button big previous"><i class="fas fa-angle-left"></i> kafka 概念介绍</a>
   
-  
-    <a href="#" class="disabled button big next"><i class="fas fa-angle-right"></i></a>
   
 </div>
+
 
       </main>
       <section id="site-sidebar">
@@ -485,8 +898,6 @@
   
       <ul class="socnet-icons">
         
-    <li><a href="/tags/oauth2/index.xml" type="application/rss+xml" target="_blank" title="RSS" class="fas fa-rss"></a></li>
-
 
         <li><a href="//github.com/yudar1024/yudar1024.github.io" target="_blank" rel="noopener" title="GitHub" class="fab fa-github"></a></li>
 
