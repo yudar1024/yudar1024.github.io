@@ -204,3 +204,64 @@ kafka分区，受linux 文件描述符上限的限制。
 
 ### 日志索引
 
+kafka 索引文件是稀疏索引，并不是每条消息都对应一条索引记录。而是每当写入一定量的消息（具体大小由log.index.interval.bytes指定，默认4096，即4KB）时，偏移量索引文件.index 和时间戳索引文件.timeindex 分别增加一条索引记录。log.index.interval.bytes的值将影响索引文件的索引密度。偏移量索引文件的索引是单调递增的。所以稀疏索引的查找使用的是二分查找法。
+
+**索引文件的拆分的触发条件**
+
+- 当索引文件大小大于log.segments.bytes时，被自动分段
+- 当日志文件的最大时间戳与系统当前的时间差值大于log.roll.ms 或大于log.roll.hours时，进行拆分，如果同时配置了两个参数，那么log.roll.ms 优先级高。
+- 偏移量索引文件或者时间索引文件的大小超过log.index.size.max的值。
+- 追加消息的偏移量，与当前日志的偏移量之间的差值大于Integer.maxvalue
+
+**偏移量索引**
+
+偏移量索引结构
+
+{{< fancybox path="/img/main" file="offsetstructure.png" caption="偏移量索引结构" gallery="偏移量索引结构" >}}
+
+偏移量索引与日志的对应关系
+
+{{< fancybox path="/img/main" file="offsetindex.png" caption="对应关系" gallery="对应关系" >}}
+
+**时间戳索引**
+
+格式
+
+timestamp+relativeOffset
+
+- timestamp 当前日志分段最大时间戳
+
+- relativeOffset 时间戳所对应的消息的相对偏移量
+
+{{< fancybox path="/img/main" file="timestampIndex.png" caption="时间戳索引对应关系" gallery="时间戳索引对应关系" >}}
+
+### 日志删除
+
+基于时间，默认7天
+
+基于日志大小，超过阈值的部分，会将日志的分段文件删除一部分，默认删除旧数据
+
+基于起始偏移量。
+
+### 日志压缩
+
+
+
+### 磁盘存储
+
+{{< fancybox path="/img/main" file="io.png" caption="IO流程" gallery="IO流程" >}}
+
+**零拷贝**
+
+指直接将数据从磁盘拷贝到网卡设备。底层依赖于linux系统的sendfile()实现，对应java的filechannel.transferto
+
+非零拷贝的四次复制过程
+
+{{< fancybox path="/img/main" file="nonezerocopy.png" caption="非零拷贝" gallery="非零拷贝" >}}
+
+
+
+零拷贝复制
+
+{{< fancybox path="/img/main" file="zerocopy.png" caption="零拷贝" gallery="零拷贝" >}}
+
