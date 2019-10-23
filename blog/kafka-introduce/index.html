@@ -14,7 +14,7 @@
 
 <meta itemprop="datePublished" content="2019-10-21T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2019-10-21T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="235">
+<meta itemprop="wordCount" content="272">
 
 
 
@@ -654,6 +654,193 @@
 
 
 <h3 id="日志索引">日志索引</h3>
+
+<p>kafka 索引文件是稀疏索引，并不是每条消息都对应一条索引记录。而是每当写入一定量的消息（具体大小由log.index.interval.bytes指定，默认4096，即4KB）时，偏移量索引文件.index 和时间戳索引文件.timeindex 分别增加一条索引记录。log.index.interval.bytes的值将影响索引文件的索引密度。偏移量索引文件的索引是单调递增的。所以稀疏索引的查找使用的是二分查找法。</p>
+
+<p><strong>索引文件的拆分的触发条件</strong></p>
+
+<ul>
+<li>当索引文件大小大于log.segments.bytes时，被自动分段</li>
+<li>当日志文件的最大时间戳与系统当前的时间差值大于log.roll.ms 或大于log.roll.hours时，进行拆分，如果同时配置了两个参数，那么log.roll.ms 优先级高。</li>
+<li>偏移量索引文件或者时间索引文件的大小超过log.index.size.max的值。</li>
+<li>追加消息的偏移量，与当前日志的偏移量之间的差值大于Integer.maxvalue</li>
+</ul>
+
+<p><strong>偏移量索引</strong></p>
+
+<p>偏移量索引结构</p>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="偏移量索引结构" href="/img/main/offsetstructure.png" data-caption="偏移量索引结构"><img src="/img/main/offsetstructure.png"></a>
+    <div class="caption">偏移量索引结构</div>
+  </div>
+
+
+
+<p>偏移量索引与日志的对应关系</p>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="对应关系" href="/img/main/offsetindex.png" data-caption="对应关系"><img src="/img/main/offsetindex.png"></a>
+    <div class="caption">对应关系</div>
+  </div>
+
+
+
+<p><strong>时间戳索引</strong></p>
+
+<p>格式</p>
+
+<p>timestamp+relativeOffset</p>
+
+<ul>
+<li><p>timestamp 当前日志分段最大时间戳</p></li>
+
+<li><p>relativeOffset 时间戳所对应的消息的相对偏移量</p></li>
+</ul>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="时间戳索引对应关系" href="/img/main/timestampIndex.png" data-caption="时间戳索引对应关系"><img src="/img/main/timestampIndex.png"></a>
+    <div class="caption">时间戳索引对应关系</div>
+  </div>
+
+
+
+<h3 id="日志删除">日志删除</h3>
+
+<p>基于时间，默认7天</p>
+
+<p>基于日志大小，超过阈值的部分，会将日志的分段文件删除一部分，默认删除旧数据</p>
+
+<p>基于起始偏移量。</p>
+
+<h3 id="日志压缩">日志压缩</h3>
+
+<h3 id="磁盘存储">磁盘存储</h3>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="IO流程" href="/img/main/io.png" data-caption="IO流程"><img src="/img/main/io.png"></a>
+    <div class="caption">IO流程</div>
+  </div>
+
+
+
+<p><strong>零拷贝</strong></p>
+
+<p>指直接将数据从磁盘拷贝到网卡设备。底层依赖于linux系统的sendfile()实现，对应java的filechannel.transferto</p>
+
+<p>非零拷贝的四次复制过程</p>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="非零拷贝" href="/img/main/nonezerocopy.png" data-caption="非零拷贝"><img src="/img/main/nonezerocopy.png"></a>
+    <div class="caption">非零拷贝</div>
+  </div>
+
+
+
+<p>零拷贝复制</p>
+
+
+
+
+  
+    
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  <div class="fancybox">
+    <a data-fancybox="零拷贝" href="/img/main/zerocopy.png" data-caption="零拷贝"><img src="/img/main/zerocopy.png"></a>
+    <div class="caption">零拷贝</div>
+  </div>
+
+
 
   </div>
   <footer>
